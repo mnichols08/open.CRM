@@ -115,7 +115,7 @@ async function seedNotes() {
     `;
 }
 
-export async function seedProducts() {
+async function seedProducts() {
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
   console.log("Creating products table");
