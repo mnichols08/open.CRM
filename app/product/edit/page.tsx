@@ -232,7 +232,7 @@ export default function Dashboard() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Add Product</BreadcrumbPage>
+                <BreadcrumbPage>Edit Product</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

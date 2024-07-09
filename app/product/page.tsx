@@ -32,7 +32,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
-export function Dashboard() {
+export default function Dashboard() {
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -50,7 +50,7 @@ export function Dashboard() {
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <Link
-                href="#"
+                href="/dashboard"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
                 <Home className="h-4 w-4" />
@@ -67,7 +67,7 @@ export function Dashboard() {
                 </Badge>
               </Link>
               <Link
-                href="#"
+                href="/product/all"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
               >
                 <Package className="h-4 w-4" />
@@ -130,7 +130,7 @@ export function Dashboard() {
                   <span className="sr-only">Acme Inc</span>
                 </Link>
                 <Link
-                  href="#"
+                  href="/dashboard"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Home className="h-5 w-5" />
@@ -147,7 +147,7 @@ export function Dashboard() {
                   </Badge>
                 </Link>
                 <Link
-                  href="#"
+                  href="/product/all"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Package className="h-5 w-5" />
@@ -229,7 +229,7 @@ export function Dashboard() {
               <p className="text-sm text-muted-foreground">
                 You can start selling as soon as you add a product.
               </p>
-              <Button className="mt-4">Add Product</Button>
+              <Button className="mt-4"><Link href="/product/add">Add Product</Link></Button>
             </div>
           </div>
         </main>
