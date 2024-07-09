@@ -30,8 +30,7 @@
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
-
+    "tailwindcss-animate": "^1.0.7",
     "@vercel/postgres": "^0.9.0",
     "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
