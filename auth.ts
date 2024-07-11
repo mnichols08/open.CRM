@@ -40,3 +40,7 @@ export const { auth, signIn, signOut } = NextAuth({
     }),
   ],
 });
+
+export const config = {
+  trustHost: true,
+  }
