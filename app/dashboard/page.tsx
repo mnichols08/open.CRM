@@ -77,10 +77,11 @@ import {
   TooltipProvider
 } from "@/components/ui/tooltip"
 
-import Customer from "./customer";
+
 import { db } from "@vercel/postgres";
 
 const client = await db.connect();
+
 
 export default async function Page() {
  const customersQuery = await client.sql`SELECT * FROM customers`
@@ -393,9 +394,7 @@ export default async function Page() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {customers.map((customer, i) => (
-                          <Customer key={`${customer.name}_${i}`} {...customer} />
-                        ))}
+                     
                       </TableBody>
                     </Table>
                   </CardContent>
