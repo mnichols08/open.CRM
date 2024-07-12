@@ -1,5 +1,3 @@
-"use client"
-import { useEffect, useState } from 'react';
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -79,22 +77,15 @@ import {
   TooltipProvider
 } from "@/components/ui/tooltip"
 
-import Customer from "./customer"
+import Customer from "./customer";
+import { db } from "@vercel/postgres";
 
-export default function Page() {
-  const [customers, setCustomers] = useState([]);
+const client = await db.connect();
 
-  useEffect(() => {
-    async function fetchCustomers() {
-      const response = await fetch('/api/customers');
-   
-      const result = await response.json();
-      console.log(result)
-      setCustomers(result);
-    }
-    fetchCustomers();
-    }, []);
-  return (
+export default async function Page() {
+ const customersQuery = await client.sql`SELECT * FROM customers`
+ const customers = customersQuery.rows;
+ return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
