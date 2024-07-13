@@ -72,8 +72,14 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { signOut } from "@/auth";
+import { db } from "@vercel/postgres";
+import Customer from "./customer";
 
-export default function Page() {
+const client = await db.connect();
+
+export default async function Page() {
+  const customersQuery = await client.sql`SELECT * FROM customers`;
+  const customers = customersQuery.rows;
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -355,15 +361,12 @@ export default function Page() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Id</TableHead>
+                      <TableHead>Name</TableHead>
                       <TableHead className="hidden sm:table-cell">
-                        Name
+                        Phone
                       </TableHead>
                       <TableHead className="hidden sm:table-cell">
                         Address
-                      </TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Contact
                       </TableHead>
                       <TableHead className="text-right">
                         Last Updated At
@@ -371,25 +374,9 @@ export default function Page() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow className="bg-accent">
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {new Date(Date.now()).toString()}
-                      </TableCell>
-                    </TableRow>
+                    {customers.map((customer) => (
+                      <Customer key={customer.id} name={customer.name} />
+                    ))}
                   </TableBody>
                 </Table>
               </CardContent>
