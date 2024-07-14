@@ -34,7 +34,6 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
-import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 
 import {
@@ -101,16 +100,16 @@ export default function Dashboard() {
           <TabsContent value="week">
             <Card x-chunk="dashboard-05-chunk-3">
               <CardHeader className="px-7">
-                <CardTitle>Orders</CardTitle>
+                <CardTitle>Tickets</CardTitle>
                 <CardDescription>
-                  Recent orders from your store.
+                  Recent tickets or inquiry.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Customer</TableHead>
+                      <TableHead>Ticket</TableHead>
                       <TableHead className="hidden sm:table-cell">
                         Type
                       </TableHead>
