@@ -36,7 +36,13 @@ import {
 } from "@/components/ui/table";
 
 import { Ticket } from "@/app/lib/definitions";
-export default function AllTickets({ data }: { data: { rows: Ticket } }) {
+import { db } from "@vercel/postgres";
+
+export default async function AllTickets() {
+  const client = await db.connect();
+  const data = await client.sql<Ticket>`SELECT * FROM tickets`;
+  const tickets: Ticket[] = data.rows;
+  client.release();
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -94,9 +100,7 @@ export default function AllTickets({ data }: { data: { rows: Ticket } }) {
               <TableHeader>
                 <TableRow>
                   <TableHead>Id</TableHead>
-                  <TableHead>
-                    <span className="sr-only">Reason</span>
-                  </TableHead>
+                  <TableHead>Reason</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Year</TableHead>
                   <TableHead>Make</TableHead>
@@ -112,7 +116,7 @@ export default function AllTickets({ data }: { data: { rows: Ticket } }) {
               </TableHeader>
 
               <TableBody>
-                {data.rows.map((ticket) => (
+                {tickets.map((ticket) => (
                   <TableRow key={ticket.id}>
                     <TableCell>{ticket.id}</TableCell>
                     <TableCell>{ticket.reason}</TableCell>
