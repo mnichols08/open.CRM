@@ -109,9 +109,6 @@ export default async function AllTickets() {
                   <TableHead>Submodel</TableHead>
                   <TableHead>Created By </TableHead>
                   <TableHead>Customer Id</TableHead>
-                  <TableHead>
-                    <span className="sr-only">Actions</span>
-                  </TableHead>
                 </TableRow>
               </TableHeader>
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopRow from "@/components/Dashboard/TopRow";
+import TopRow from "@/components/Tickets/TopRow";
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
