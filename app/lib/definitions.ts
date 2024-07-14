@@ -17,16 +17,16 @@ export type Customer = {
 };
 
 export type Ticket = {
-  id: string;
-  reason: string;
-  status: string;
-  year: string;
-  make: string;
-  model: string;
-  engine: string;
-  submodel: string;
-  created_by: string;
-  customer_id: string;
+  id: string | null;
+  reason: string | null;
+  status: string | null;
+  year: number | null;
+  make: string | null;
+  model: string | null;
+  engine: string | null;
+  submodel: string | null;
+  created_by: string | null;
+  customer_id: string | null;
 };
 
 export type Invoice = {
