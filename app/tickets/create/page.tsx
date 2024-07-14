@@ -43,7 +43,7 @@ export default function CreateTicketPage() {
                   <div className="grid gap-6">
                   <div className="grid gap-3">
                       <Label htmlFor="customer">Customer</Label>
-                      <CustomerDropDown />
+                      <CustomerDropDown selectedCustomer={undefined} />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="name">Reason</Label>
