@@ -1,16 +1,15 @@
+import Link from "next/link";
+import TopRow from "@/components/Dashboard/TopRow";
+import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
   ChevronRight,
   Copy,
-  CreditCard,
   File,
   ListFilter,
+  MoreHorizontal,
   MoreVertical,
-  Truck,
 } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,8 +33,6 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
-import { Separator } from "@/components/ui/separator";
-
 import {
   Table,
   TableBody,
@@ -45,14 +42,29 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TopRow from "@/components/Dashboard/TopRow";
+import { sql } from "@vercel/postgres";
+import { Ticket } from "../lib/definitions";
 
-export default function Dashboard() {
+export default async function Dashboard() {
   // Example values for the tickets dashboard (top row variables)
   const wTickets = Math.floor(Math.random() * 100);
   const wTicketsLastWeek = Math.floor(Math.random() * 100);
   const mTickets = wTicketsLastWeek * 4;
   const mTicketsLastMonth = Math.floor(Math.random() * 1000);
+  const data = await sql<Ticket>`SELECT * FROM tickets`;
+  const exampleTicket = {
+    customer: "RAPID REPAIR",
+    customerID: "2afa1b1a-4525-45c1-af03-cd191a3efd04",
+    reason: "water pump",
+    year: 2022,
+    make: "Toyota",
+    model: "Corolla",
+    engine: "1.8L",
+    submodel: "LE",
+    notes: ["needs brake pads, rotors, calipers", "found leak", "ordered part"],
+    status: "action",
+    date: "2023-09-10",
+  };
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -107,180 +119,58 @@ export default function Dashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Ticket</TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Type
+                      <TableHead>Id</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Reason</span>
                       </TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Status
+                      <TableHead>Status</TableHead>
+                      <TableHead>Year</TableHead>
+                      <TableHead>Make</TableHead>
+                      <TableHead>Model</TableHead>
+                      <TableHead>Engine</TableHead>
+                      <TableHead>Submodel</TableHead>
+                      <TableHead>Created By </TableHead>
+                      <TableHead>Customer Id</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
                       </TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Date
-                      </TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
                     </TableRow>
                   </TableHeader>
+
                   <TableBody>
-                    <TableRow className="bg-accent">
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          olivia@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Refund
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-24
-                      </TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Noah Williams</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          noah@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Subscription
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-25
-                      </TableCell>
-                      <TableCell className="text-right">$350.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          emma@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-26
-                      </TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          olivia@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Refund
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-24
-                      </TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          emma@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-26
-                      </TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
-                    </TableRow>
+                    {data.rows.map((ticket) => (
+                      <TableRow key={ticket.id}>
+                        <TableCell>{ticket.id}</TableCell>
+                        <TableCell>{ticket.reason}</TableCell>
+                        <TableCell>{ticket.status}</TableCell>
+                        <TableCell>{ticket.year}</TableCell>
+                        <TableCell>{ticket.make}</TableCell>
+                        <TableCell>{ticket.model}</TableCell>
+                        <TableCell>{ticket.engine}</TableCell>
+                        <TableCell>{ticket.submodel}</TableCell>
+                        <TableCell>{ticket.created_by}</TableCell>
+                        <TableCell>{ticket.customer_id}</TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                aria-haspopup="true"
+                                size="icon"
+                                variant="ghost"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Toggle menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <Link href="/tickets/edit"><DropdownMenuItem>Edit</DropdownMenuItem></Link>
+                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -293,25 +183,25 @@ export default function Dashboard() {
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="grid gap-0.5">
               <CardTitle className="group flex items-center gap-2 text-lg">
-                Order Oe31b70H
+                Ticket {exampleTicket.customerID.slice(-7)}
                 <Button
                   size="icon"
                   variant="outline"
                   className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
                 >
                   <Copy className="h-3 w-3" />
-                  <span className="sr-only">Copy Order ID</span>
+                  <span className="sr-only">Copy Ticket ID</span>
                 </Button>
               </CardTitle>
-              <CardDescription>Date: November 23, 2023</CardDescription>
+              <CardDescription>Date: July 13, 2024</CardDescription>
             </div>
             <div className="ml-auto flex items-center gap-1">
-              <Button size="sm" variant="outline" className="h-8 gap-1">
+              {/* <Button size="sm" variant="outline" className="h-8 gap-1">
                 <Truck className="h-3.5 w-3.5" />
                 <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
                   Track Order
                 </span>
-              </Button>
+              </Button> */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon" variant="outline" className="h-8 w-8">
@@ -320,7 +210,7 @@ export default function Dashboard() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                  <Link href="/tickets/edit"><DropdownMenuItem>Edit</DropdownMenuItem></Link>
                   <DropdownMenuItem>Export</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Trash</DropdownMenuItem>
@@ -330,97 +220,58 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="p-6 text-sm">
             <div className="grid gap-3">
-              <div className="font-semibold">Order Details</div>
-              <ul className="grid gap-3">
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">
-                    Glimmer Lamps x <span>2</span>
-                  </span>
-                  <span>$250.00</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">
-                    Aqua Filters x <span>1</span>
-                  </span>
-                  <span>$49.00</span>
-                </li>
-              </ul>
-              <Separator className="my-2" />
-              <ul className="grid gap-3">
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span>$299.00</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span>$5.00</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Tax</span>
-                  <span>$25.00</span>
-                </li>
-                <li className="flex items-center justify-between font-semibold">
-                  <span className="text-muted-foreground">Total</span>
-                  <span>$329.00</span>
-                </li>
-              </ul>
-            </div>
-            <Separator className="my-4" />
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-3">
-                <div className="font-semibold">Shipping Information</div>
-                <address className="grid gap-0.5 not-italic text-muted-foreground">
-                  <span>Liam Johnson</span>
-                  <span>1234 Main St.</span>
-                  <span>Anytown, CA 12345</span>
-                </address>
-              </div>
-              <div className="grid auto-rows-max gap-3">
-                <div className="font-semibold">Billing Information</div>
-                <div className="text-muted-foreground">
-                  Same as shipping address
-                </div>
-              </div>
-            </div>
-            <Separator className="my-4" />
-            <div className="grid gap-3">
-              <div className="font-semibold">Customer Information</div>
+              <div className="font-semibold">Ticket Details</div>
               <dl className="grid gap-3">
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Customer</dt>
-                  <dd>Liam Johnson</dd>
+                  <dt className="text-muted-foreground">Ticket ID</dt>
+                  <dd>{exampleTicket.customerID.slice(-7)}</dd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Email</dt>
+                  <dt className="text-muted-foreground">Status</dt>
                   <dd>
-                    <a href="mailto:">liam@acme.com</a>
+                    <span className="text-primary">{exampleTicket.status}</span>
                   </dd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Phone</dt>
-                  <dd>
-                    <a href="tel:">+1 234 567 890</a>
-                  </dd>
+                  <dt className="text-muted-foreground">Reason</dt>
+                  <dd>{exampleTicket.reason}</dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Year</dt>
+                  <dd>{exampleTicket.year}</dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Make</dt>
+                  <dd>{exampleTicket.make}</dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Model</dt>
+                  <dd>{exampleTicket.model}</dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Engine</dt>
+                  <dd>{exampleTicket.engine}</dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Submodel</dt>
+                  <dd>{exampleTicket.submodel}</dd>
                 </div>
               </dl>
-            </div>
-            <Separator className="my-4" />
-            <div className="grid gap-3">
-              <div className="font-semibold">Payment Information</div>
+              <Separator className="my-2" />
+              <div className="font-semibold">Notes</div>
               <dl className="grid gap-3">
-                <div className="flex items-center justify-between">
-                  <dt className="flex items-center gap-1 text-muted-foreground">
-                    <CreditCard className="h-4 w-4" />
-                    Visa
-                  </dt>
-                  <dd>**** **** **** 4532</dd>
-                </div>
+                {exampleTicket.notes.map((note, i) => (
+                  <div className="flex items-center justify-between" key={i}>
+                    <dt className="text-muted-foreground">Note {i + 1}</dt>
+                    <dd>{note}</dd>
+                  </div>
+                ))}
               </dl>
             </div>
           </CardContent>
           <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
             <div className="text-xs text-muted-foreground">
-              Updated <time dateTime="2023-11-23">November 23, 2023</time>
+              Updated <time dateTime="2024-13-24">July 13, 2024</time>
             </div>
             <Pagination className="ml-auto mr-0 w-auto">
               <PaginationContent>
