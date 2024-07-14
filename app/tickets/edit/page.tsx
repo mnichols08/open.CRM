@@ -23,10 +23,22 @@ import PageLayout from "@/components/PageLayout";
 import CustomerDropDown from "@/components/CustomerDropDown";
 import { Textarea } from "@/components/ui/textarea";
 
-
 export default function CreateTicketPage() {
+  const exampleTicket = {
+    customer: "RAPID REPAIR",
+    customerID: "2afa1b1a-4525-45c1-af03-cd191a3efd04",
+    reason: "water pump",
+    year: 2022,
+    make: "Toyota",
+    model: "Corolla",
+    engine: "1.8L",
+    submodel: "LE",
+    notes: ["needs brake pads, rotors, calipers", "found leak", "ordered part"],
+    status: "action",
+    date: "2023-09-10",
+  };
   return (
-    <PageLayout breadcrumb={["Tickets", "Create Ticket"]}>
+    <PageLayout breadcrumb={["Tickets", "Edit Ticket"]}>
       <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
           <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
@@ -35,15 +47,17 @@ export default function CreateTicketPage() {
                 <CardHeader>
                   <CardTitle>Ticket Details</CardTitle>
                   <CardDescription>
-                    Input details about this ticket. Ask for as much Information
+                    Edit details about this ticket. Provide as much Information
                     as you can think of.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-6">
-                  <div className="grid gap-3">
+                    <div className="grid gap-3">
                       <Label htmlFor="customer">Customer</Label>
-                      <CustomerDropDown selectedCustomer={undefined} />
+                      <CustomerDropDown
+                        selectedCustomer={exampleTicket.customerID}
+                      />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="name">Reason</Label>
@@ -51,7 +65,7 @@ export default function CreateTicketPage() {
                         id="name"
                         type="text"
                         className="w-full"
-                        defaultValue=""
+                        defaultValue={exampleTicket.reason}
                         placeholder="Give a general reason for opening this ticket"
                       />
                     </div>
@@ -66,46 +80,51 @@ export default function CreateTicketPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                <div className="grid gap-3">
-                      <Label htmlFor="year">Year</Label>
-                      <Input
-                        type="number"
-                        id="year"
-                        placeholder="Enter a Vehicle Year"
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="make">Make</Label>
-                      <Input
-                        type="text"
-                        id="make"
-                        placeholder="Enter a Vehicle Make"
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="model">Model</Label>
-                      <Input
-                        type="text"
-                        id="model"
-                        placeholder="Enter a Vehicle Model"
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="submodel">Sub Model</Label>
-                      <Input
-                        type="text"
-                        id="submodel"
-                        placeholder="Enter a Vehicle Sub Model"
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="engine">Engine</Label>
-                      <Input
-                        type="text"
-                        id="engine"
-                        placeholder="Enter a Vehicle Engine"
-                      />
-                    </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="year">Year</Label>
+                    <Input
+                      type="number"
+                      id="year"
+                      placeholder="Enter a Vehicle Year"
+                      defaultValue={exampleTicket.year}
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="make">Make</Label>
+                    <Input
+                      type="text"
+                      id="make"
+                      placeholder="Enter a Vehicle Make"
+                      defaultValue={exampleTicket.make}
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="model">Model</Label>
+                    <Input
+                      type="text"
+                      id="model"
+                      placeholder="Enter a Vehicle Model"
+                      defaultValue={exampleTicket.model}
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="submodel">Sub Model</Label>
+                    <Input
+                      type="text"
+                      id="submodel"
+                      placeholder="Enter a Vehicle Sub Model"
+                      defaultValue={exampleTicket.submodel}
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="engine">Engine</Label>
+                    <Input
+                      type="text"
+                      id="engine"
+                      placeholder="Enter a Vehicle Engine"
+                      defaultValue={exampleTicket.engine}
+                    />
+                  </div>
                 </CardContent>
               </Card>
               <Card x-chunk="dashboard-07-chunk-2">
@@ -113,12 +132,14 @@ export default function CreateTicketPage() {
                   <CardTitle>Ticket Notes</CardTitle>
                 </CardHeader>
                 <CardContent>
-                <Textarea
-                          id="description"
-                          defaultValue=""
-                          placeholder="Add any notes about this ticket"
-                          className="min-h-32"
-                        />
+                {exampleTicket.notes.map((note, i) => (
+                   <div className="grid grid-gap-3" key={i}>
+                     <Textarea
+                        id={`note-${i}`}
+                        defaultValue={note}
+                        placeholder="Enter a note" />
+                   </div>
+                ))}
                 </CardContent>
                 <CardFooter className="justify-center border-t p-4">
                   <Button size="sm" variant="ghost" className="gap-1">
@@ -137,7 +158,7 @@ export default function CreateTicketPage() {
                   <div className="grid gap-6">
                     <div className="grid gap-3">
                       <Label htmlFor="status">Status</Label>
-                      <Select>
+                      <Select defaultValue={exampleTicket.status}>
                         <SelectTrigger id="status" aria-label="Select status">
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
@@ -155,7 +176,8 @@ export default function CreateTicketPage() {
                 <CardHeader>
                   <CardTitle>Useful Links</CardTitle>
                   <CardDescription>
-                    Did you find any useful articles or resources related to this? Please add them here.
+                    Did you find any useful articles or resources related to
+                    this? Please add them here.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -178,7 +200,9 @@ export default function CreateTicketPage() {
                 <CardHeader>
                   <CardTitle>Archive Ticket</CardTitle>
                   <CardDescription>
-                    If this ticket is no longer needed, you can archive it. Don&apos;t worry it will won&apos;t be deleted and you can always access it later.
+                    If this ticket is no longer needed, you can archive it.
+                    Don&apos;t worry it will won&apos;t be deleted and you can
+                    always access it later.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
