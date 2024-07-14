@@ -1,6 +1,7 @@
 import Link from "next/link";
-import TopRow from "@/components/Dashboard/TopRow";
+import TopRow from "@/components/Customers/TopRow";
 import { Separator } from "@/components/ui/separator";
+import AllCustomers from "@/components/Customers/AllCustomers";
 import {
   ChevronLeft,
   ChevronRight,
@@ -68,12 +69,13 @@ export default async function Dashboard() {
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-        {/* <TopRow
-          wTickets={wTickets}
-          wTicketsLastWeek={wTicketsLastWeek}
-          mTickets={mTickets}
-          mTicketsLastMonth={mTicketsLastMonth}
-        /> */}
+        <TopRow
+          summary={{
+            title: "Tickets",
+            desc: "View and manage all tickets",
+            buttonText: "Create Ticket",
+          }}
+        />
         <Tabs defaultValue="week">
           <div className="flex items-center">
             <TabsList>
@@ -81,102 +83,9 @@ export default async function Dashboard() {
               <TabsTrigger value="month">Month</TabsTrigger>
               <TabsTrigger value="year">Year</TabsTrigger>
             </TabsList>
-            <div className="ml-auto flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 gap-1 text-sm"
-                  >
-                    <ListFilter className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Filter</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    Fulfilled
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Declined</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Export</span>
-              </Button>
-            </div>
           </div>
           <TabsContent value="week">
-            <Card x-chunk="dashboard-05-chunk-3">
-              <CardHeader className="px-7">
-                <CardTitle>Tickets</CardTitle>
-                <CardDescription>Recent tickets or inquiry.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Id</TableHead>
-                      <TableHead>
-                        <span className="sr-only">Reason</span>
-                      </TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Year</TableHead>
-                      <TableHead>Make</TableHead>
-                      <TableHead>Model</TableHead>
-                      <TableHead>Engine</TableHead>
-                      <TableHead>Submodel</TableHead>
-                      <TableHead>Created By </TableHead>
-                      <TableHead>Customer Id</TableHead>
-                      <TableHead>
-                        <span className="sr-only">Actions</span>
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-
-                  <TableBody>
-                    {data.rows.map((ticket) => (
-                      <TableRow key={ticket.id}>
-                        <TableCell>{ticket.id}</TableCell>
-                        <TableCell>{ticket.reason}</TableCell>
-                        <TableCell>{ticket.status}</TableCell>
-                        <TableCell>{ticket.year}</TableCell>
-                        <TableCell>{ticket.make}</TableCell>
-                        <TableCell>{ticket.model}</TableCell>
-                        <TableCell>{ticket.engine}</TableCell>
-                        <TableCell>{ticket.submodel}</TableCell>
-                        <TableCell>{ticket.created_by}</TableCell>
-                        <TableCell>{ticket.customer_id}</TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <Link href="/tickets/edit">
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
-                              </Link>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+            <AllCustomers />
           </TabsContent>
         </Tabs>
       </div>
