@@ -43,7 +43,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { sql } from "@vercel/postgres";
-import { Ticket } from "../lib/definitions";
+import { Ticket } from "../../lib/definitions";
 
 export default async function Dashboard() {
   // Example values for the tickets dashboard (top row variables)
@@ -164,7 +164,9 @@ export default async function Dashboard() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <Link href="/tickets/edit"><DropdownMenuItem>Edit</DropdownMenuItem></Link>
+                              <Link href="/tickets/edit">
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                              </Link>
                               <DropdownMenuItem>Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -210,7 +212,9 @@ export default async function Dashboard() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <Link href="/tickets/edit"><DropdownMenuItem>Edit</DropdownMenuItem></Link>
+                  <Link href="/tickets/edit">
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem>Export</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Trash</DropdownMenuItem>

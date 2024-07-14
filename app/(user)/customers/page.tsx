@@ -7,6 +7,7 @@ import {
   Copy,
   File,
   ListFilter,
+  MoreHorizontal,
   MoreVertical,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -32,17 +33,25 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AllTickets from "@/components/Tickets/AllTickets";
+import { sql } from "@vercel/postgres";
+import { Ticket } from "../../lib/definitions";
 
-
-export default async function TicketsDashboard() {
+export default async function Dashboard() {
   // Example values for the tickets dashboard (top row variables)
   const wTickets = Math.floor(Math.random() * 100);
   const wTicketsLastWeek = Math.floor(Math.random() * 100);
   const mTickets = wTicketsLastWeek * 4;
   const mTicketsLastMonth = Math.floor(Math.random() * 1000);
+  const data = await sql<Ticket>`SELECT * FROM tickets`;
   const exampleTicket = {
     customer: "RAPID REPAIR",
     customerID: "2afa1b1a-4525-45c1-af03-cd191a3efd04",
@@ -59,12 +68,12 @@ export default async function TicketsDashboard() {
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-        <TopRow
+        {/* <TopRow
           wTickets={wTickets}
           wTicketsLastWeek={wTicketsLastWeek}
           mTickets={mTickets}
           mTicketsLastMonth={mTicketsLastMonth}
-        />
+        /> */}
         <Tabs defaultValue="week">
           <div className="flex items-center">
             <TabsList>
@@ -101,7 +110,73 @@ export default async function TicketsDashboard() {
             </div>
           </div>
           <TabsContent value="week">
-            <AllTickets />
+            <Card x-chunk="dashboard-05-chunk-3">
+              <CardHeader className="px-7">
+                <CardTitle>Tickets</CardTitle>
+                <CardDescription>Recent tickets or inquiry.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Id</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Reason</span>
+                      </TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Year</TableHead>
+                      <TableHead>Make</TableHead>
+                      <TableHead>Model</TableHead>
+                      <TableHead>Engine</TableHead>
+                      <TableHead>Submodel</TableHead>
+                      <TableHead>Created By </TableHead>
+                      <TableHead>Customer Id</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+
+                  <TableBody>
+                    {data.rows.map((ticket) => (
+                      <TableRow key={ticket.id}>
+                        <TableCell>{ticket.id}</TableCell>
+                        <TableCell>{ticket.reason}</TableCell>
+                        <TableCell>{ticket.status}</TableCell>
+                        <TableCell>{ticket.year}</TableCell>
+                        <TableCell>{ticket.make}</TableCell>
+                        <TableCell>{ticket.model}</TableCell>
+                        <TableCell>{ticket.engine}</TableCell>
+                        <TableCell>{ticket.submodel}</TableCell>
+                        <TableCell>{ticket.created_by}</TableCell>
+                        <TableCell>{ticket.customer_id}</TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                aria-haspopup="true"
+                                size="icon"
+                                variant="ghost"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Toggle menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <Link href="/tickets/edit">
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                              </Link>
+                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>
