@@ -8,10 +8,16 @@ function OuterWrapper({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-function InnerWrapper({ children }: { children: React.ReactNode }) {
+function InnerWrapper({
+  children,
+  breadcrumb,
+}: {
+  children: React.ReactNode;
+  breadcrumb: string[];
+}) {
   return (
     <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-      <Header />
+      <Header breadcrumb={breadcrumb} />
       {children}
     </div>
   );
@@ -19,13 +25,15 @@ function InnerWrapper({ children }: { children: React.ReactNode }) {
 
 export default function PageLayout({
   children,
+  breadcrumb,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode,
+  breadcrumb: string[]
 }) {
   return (
     <OuterWrapper>
       <Aside />
-      <InnerWrapper>{children}</InnerWrapper>
+      <InnerWrapper breadcrumb={breadcrumb}>{children}</InnerWrapper>
     </OuterWrapper>
   );
 }

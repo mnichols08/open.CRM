@@ -13,7 +13,6 @@ import {
 
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -33,7 +32,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-export default function Header() {
+export default function Header({ breadcrumb }: { breadcrumb: string[] }) {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
@@ -50,7 +49,7 @@ export default function Header() {
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
               <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-              <span className="sr-only">Acme Inc</span>
+              <span className="sr-only">open.CRM</span>
             </Link>
             <Link
               href="#"
@@ -94,19 +93,19 @@ export default function Header() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="#">Dashboard</Link>
+              <Link href={`/dashboard`}>Dashboard</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Orders</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Recent Orders</BreadcrumbPage>
-          </BreadcrumbItem>
+          {breadcrumb.map((item, index) => (
+            <>
+              <BreadcrumbSeparator key={index} />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href={`/${item}`.toLowerCase()}>{item}</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </>
+          ))}
         </BreadcrumbList>
       </Breadcrumb>
       <div className="relative ml-auto flex-1 md:grow-0">

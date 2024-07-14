@@ -3,7 +3,7 @@ import Dashboard from '@/components/Dashboard';
 
 export default function DashboardPage() {
     return (
-        <PageLayout>
+        <PageLayout breadcrumb={[]}>
             <Dashboard />
         </PageLayout>
     )
