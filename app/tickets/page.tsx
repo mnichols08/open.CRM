@@ -369,7 +369,7 @@ export default async function Page() {
 
                   <TableBody>
                     {data.rows.map((ticket) => (
-                      <TableRow>
+                      <TableRow key={ticket.id}>
                         <TableCell>{ticket.id}</TableCell>
                         <TableCell>{ticket.reason}</TableCell>
                         <TableCell>{ticket.status}</TableCell>
