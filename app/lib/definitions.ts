@@ -17,10 +17,10 @@ export type Customer = {
 };
 
 export type Ticket = {
-  id: string;
+  id: string | null;
   reason: string | null;
   status: string | null;
-  year: string | null;
+  year: number | null;
   make: string | null;
   model: string | null;
   engine: string | null;
