@@ -178,7 +178,7 @@ export default function CreateTicketPage() {
                 <CardHeader>
                   <CardTitle>Archive Ticket</CardTitle>
                   <CardDescription>
-                    If this ticket is no longer needed, you can archive it. Don't worry it will won't be deleted and you can always access it later.
+                    If this ticket is no longer needed, you can archive it. Don&apos;t worry it will won&apos;t be deleted and you can always access it later.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
