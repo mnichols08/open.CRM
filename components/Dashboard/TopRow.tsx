@@ -1,4 +1,4 @@
-import Summary from "@/components/Summary";
+import Summary from "@/components/Dashboard/Summary";
 import {
   Card,
   CardContent,
