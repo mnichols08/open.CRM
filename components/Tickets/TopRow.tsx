@@ -1,4 +1,4 @@
-import Summary from "@/components/Dashboard/Summary";
+import Summary from "@/components/Summary";
 import {
   Card,
   CardContent,
@@ -86,18 +86,20 @@ export default function TopRow({
   mTicketsLastMonth,
   wTickets,
   wTicketsLastWeek,
+  summary,
 }: {
   mTickets: number;
   mTicketsLastMonth: number;
   wTickets: number;
   wTicketsLastWeek: number;
+  summary: { title: string; desc: string; buttonText: string };
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
       <Summary
-        title="Tickets"
-        desc="Introducing Our Dynamic Tickets Dashboard for Seamless Management and Insightful Analysis."
-        buttonText={"Create New Ticket"}
+        title={summary.title}
+        desc={summary.desc}
+        buttonText={summary.buttonText}
       />
       <WeekProgress nTickets={wTickets} nTicketsLastWeek={wTicketsLastWeek} />
       <MonthProgress

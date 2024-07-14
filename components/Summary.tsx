@@ -9,11 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-interface Summary {
-  title: string | null;
-  desc: string | null;
-  buttonText: string | null;
-}
+
+import type { Summary } from "./definitions";
+
 const Summary: React.FC<Summary> = ({ title, desc, buttonText }) => {
   return (
     <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
@@ -24,7 +22,7 @@ const Summary: React.FC<Summary> = ({ title, desc, buttonText }) => {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href="/tickets/create" passHref>
+        <Link href={`/${title?.toLowerCase()}/create`} passHref>
           <Button>{buttonText}</Button>
         </Link>
       </CardFooter>

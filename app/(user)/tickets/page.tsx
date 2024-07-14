@@ -63,6 +63,11 @@ export default async function TicketsDashboard() {
           wTicketsLastWeek={wTicketsLastWeek}
           mTickets={mTickets}
           mTicketsLastMonth={mTicketsLastMonth}
+          summary={{
+            title: "Tickets",
+            desc: "View and manage all tickets",
+            buttonText: "Create Ticket",
+          }}
         />
         <Tabs defaultValue="week">
           <div className="flex items-center">

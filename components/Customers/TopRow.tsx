@@ -8,90 +8,54 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-function WeekProgress({
-  nTickets,
-  nTicketsLastWeek,
-}: {
-  nTickets: number;
-  nTicketsLastWeek: number;
-}) {
-  const improvement = Math.round(
-    ((nTickets - nTicketsLastWeek) / nTicketsLastWeek) * 100
-  );
-  const isImprovementPositive = improvement > 0;
-  const improvementText = isImprovementPositive
-    ? `+${improvement}`
-    : improvement;
+function WeekProgress({}: {}) {
   return (
     <Card x-chunk="dashboard-05-chunk-1">
       <CardHeader className="pb-2">
         <CardDescription>This Week</CardDescription>
-        <CardTitle className="text-3xl">{nTickets} Tickets</CardTitle>
+        <CardTitle className="text-3xl">10 Tickets</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="text-xs text-muted-foreground">
-          {improvementText}% from last week
+          Based on n from last week
         </div>
       </CardContent>
       <CardFooter>
-        <Progress
+        {/* <Progress
           value={improvement}
           aria-label={`${improvement}% ${
             isImprovementPositive ? "increase" : "decrease"
           }`}
-        />
+        /> */}
       </CardFooter>
     </Card>
   );
 }
 
-function MonthProgress({
-  nTickets,
-  nTicketsLastMonth,
-}: {
-  nTickets: number;
-  nTicketsLastMonth: number;
-}) {
-  const improvement = Math.round(
-    ((nTickets - nTicketsLastMonth) / nTicketsLastMonth) * 100
-  );
-  const isImprovementPositive = improvement > 0;
-  const improvementText = isImprovementPositive
-    ? `+${improvement}`
-    : improvement;
+function MonthProgress({}: {}) {
   return (
     <Card x-chunk="dashboard-05-chunk-3">
       <CardHeader className="pb-2">
         <CardDescription>This Month</CardDescription>
-        <CardTitle className="text-3xl">{nTickets} Tickets</CardTitle>
+        <CardTitle className="text-3xl">10 Tickets</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="text-xs text-muted-foreground">
-          {improvementText}% from last month
-        </div>
+        <div className="text-xs text-muted-foreground">from last month</div>
       </CardContent>
       <CardFooter>
-        <Progress
+        {/* <Progress
           value={improvement}
           aria-label={`${improvement}% ${
             isImprovementPositive ? "increase" : "decrease"
           }`}
-        />
+        /> */}
       </CardFooter>
     </Card>
   );
 }
 export default function TopRow({
-  mTickets,
-  mTicketsLastMonth,
-  wTickets,
-  wTicketsLastWeek,
   summary,
 }: {
-  mTickets: number;
-  mTicketsLastMonth: number;
-  wTickets: number;
-  wTicketsLastWeek: number;
   summary: { title: string; desc: string; buttonText: string };
 }) {
   return (
@@ -101,11 +65,8 @@ export default function TopRow({
         desc={summary.desc}
         buttonText={summary.buttonText}
       />
-      <WeekProgress nTickets={wTickets} nTicketsLastWeek={wTicketsLastWeek} />
-      <MonthProgress
-        nTickets={mTickets}
-        nTicketsLastMonth={mTicketsLastMonth}
-      />
+      <WeekProgress />
+      <MonthProgress />
     </div>
   );
 }

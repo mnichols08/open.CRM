@@ -40,8 +40,8 @@ import { db } from "@vercel/postgres";
 
 export default async function AllTickets() {
   const client = await db.connect();
-  const data = await client.sql<Customer>`SELECT * FROM customers`;
-  const tickets: Customer[] = data.rows;
+  const data = await client.sql<Ticket>`SELECT * FROM customers`;
+  const tickets: Ticket[] = data.rows;
   client.release();
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">

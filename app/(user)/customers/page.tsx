@@ -71,9 +71,9 @@ export default async function Dashboard() {
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <TopRow
           summary={{
-            title: "Tickets",
-            desc: "View and manage all tickets",
-            buttonText: "Create Ticket",
+            title: "Customers",
+            desc: "View and manage all customers",
+            buttonText: "Create Customer",
           }}
         />
         <Tabs defaultValue="week">
