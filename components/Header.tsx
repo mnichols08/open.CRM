@@ -1,3 +1,5 @@
+"use client"
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -32,7 +34,10 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-export default function Header({ breadcrumb }: { breadcrumb: string[] }) {
+export default function Header() {
+  const pathname = usePathname();
+  const breadcrumbs = pathname.split("/").filter((item) => item !== "" && item !== "dashboard");
+  const breadcrumb = breadcrumbs.map((item) => item.charAt(0).toUpperCase() + item.slice(1));
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
