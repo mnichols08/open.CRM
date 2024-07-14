@@ -24,7 +24,7 @@ const Summary: React.FC<Summary> = ({ title, desc, buttonText }) => {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href="/ticket/create" passHref>
+        <Link href="/tickets/create" passHref>
           <Button>{buttonText}</Button>
         </Link>
       </CardFooter>
