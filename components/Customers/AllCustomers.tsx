@@ -124,7 +124,7 @@ export default async function AllCustomers() {
                     <TableCell>{customer.zip}</TableCell>
                     <TableCell>{customer.country}</TableCell>
                     <TableCell>{customer.phone}</TableCell>
-                    <TableCell>{customer.created_at}</TableCell>
+                    {/* <TableCell>{customer.created_at}</TableCell> */}
 
                     <TableCell>
                       <DropdownMenu>
