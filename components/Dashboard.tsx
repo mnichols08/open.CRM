@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TopRow from "@/components/Dashboard/TopRow";
+import { title } from "process";
 
 export default function Dashboard() {
   // Example values for the tickets dashboard (top row variables)
@@ -54,13 +55,18 @@ export default function Dashboard() {
   const mTickets = wTicketsLastWeek * 4;
   const mTicketsLastMonth = Math.floor(Math.random() * 1000);
   return (
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <TopRow
           wTickets={wTickets}
           wTicketsLastWeek={wTicketsLastWeek}
           mTickets={mTickets}
           mTicketsLastMonth={mTicketsLastMonth}
+          summary={{
+            title: "Tickets",
+            desc: "Recent tickets or inquiry.",
+            buttonText: "View all tickets",
+          }}
         />
         <Tabs defaultValue="week">
           <div className="flex items-center">
@@ -101,9 +107,7 @@ export default function Dashboard() {
             <Card x-chunk="dashboard-05-chunk-3">
               <CardHeader className="px-7">
                 <CardTitle>Tickets</CardTitle>
-                <CardDescription>
-                  Recent tickets or inquiry.
-                </CardDescription>
+                <CardDescription>Recent tickets or inquiry.</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
