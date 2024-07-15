@@ -6,9 +6,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Copy,
-  File,
-  ListFilter,
-  MoreHorizontal,
   MoreVertical,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,10 +19,8 @@ import {
 } from "@/components/ui/card";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -34,17 +29,9 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { sql } from "@vercel/postgres";
-import { Ticket } from "../../lib/definitions";
+import { Ticket } from "../../../lib/definitions";
 
 export default async function Dashboard() {
   // Example values for the tickets dashboard (top row variables)

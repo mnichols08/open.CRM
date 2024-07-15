@@ -35,7 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Ticket } from "@/app/lib/definitions";
+import { Ticket } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
 
 export default async function AllTickets() {
