@@ -35,7 +35,7 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AllProducts from "@/components/Products/AllProducts";
-import { Product } from "@/app/lib/definitions";
+import { Product } from "@/lib/definitions";
 
 const exampleProduct: Product = {
   id: "12345678",
