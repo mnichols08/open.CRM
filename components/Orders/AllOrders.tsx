@@ -35,7 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Order } from "@/app/lib/definitions";
+import { Order } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
 
 export default async function AllOrders() {
