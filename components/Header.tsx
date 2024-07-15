@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,8 +36,12 @@ import { Input } from "@/components/ui/input";
 
 export default function Header() {
   const pathname = usePathname();
-  const breadcrumbs = pathname.split("/").filter((item) => item !== "" && item !== "dashboard");
-  const breadcrumb = breadcrumbs.map((item) => item.charAt(0).toUpperCase() + item.slice(1));
+  const breadcrumbs = pathname
+    .split("/")
+    .filter((item) => item !== "" && item !== "dashboard");
+  const breadcrumb = breadcrumbs.map(
+    (item) => item.charAt(0).toUpperCase() + item.slice(1)
+  );
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
@@ -145,7 +149,9 @@ export default function Header() {
           </DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <Link href="/sign-out">
+            <DropdownMenuItem>Logout</DropdownMenuItem>
+          </Link>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
