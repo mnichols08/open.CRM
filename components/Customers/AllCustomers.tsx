@@ -35,7 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Customer } from "@/app/lib/definitions";
+import { Customer } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
 
 export default async function AllCustomers() {

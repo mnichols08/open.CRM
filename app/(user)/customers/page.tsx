@@ -2,15 +2,7 @@ import Link from "next/link";
 import TopRow from "@/components/Customers/TopRow";
 import { Separator } from "@/components/ui/separator";
 import AllCustomers from "@/components/Customers/AllCustomers";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  File,
-  ListFilter,
-  MoreHorizontal,
-  MoreVertical,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Copy, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,10 +14,8 @@ import {
 } from "@/components/ui/card";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -34,17 +24,9 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { sql } from "@vercel/postgres";
-import { Customer } from "../../lib/definitions";
+import { Customer } from "@/lib/definitions";
 
 const exampleCustomer: Customer = {
   id: "12345678",
