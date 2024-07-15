@@ -10,10 +10,39 @@ export type User = {
 };
 
 export type Customer = {
-  id: string;
-  name: string;
-  email: string;
-  image_url: string;
+  id: string | null;
+  name: string | null;
+  address1: string | null;
+  address2: string | null;
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+  country: string | null;
+  phone: string | null;
+  created_at: string | null;
+};
+
+export type Product = {
+  id: string | null;
+  linecode: string | null;
+  partnumber: string | null;
+  name: string | null;
+  order_id: string | null;
+  cost: number | null;
+  quoted_price: number | null;
+  extra_cost: number | null;
+  source: string | null;
+  description: string | null;
+  created_at: string | null;
+};
+
+export type Order = {
+  id: string | null;
+  source: string | null;
+  parts: string | null;
+  eta: string | null;
+  freight: string | null;
+  created_at: string | null;
 };
 
 export type Ticket = {

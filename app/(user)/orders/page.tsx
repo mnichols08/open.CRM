@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopRow from "@/components/Dashboard/TopRow";
+import TopRow from "@/components/Orders/TopRow";
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
@@ -34,35 +34,30 @@ import {
 } from "@/components/ui/pagination";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AllTickets from "@/components/Tickets/AllTickets";
+import AllOrders from "@/components/Orders/AllOrders";
+// import AllTickets from "@/components/Tickets/AllTickets";
 
-export default async function TicketsDashboard() {
+const exampleOrder = {
+  id: "12345678",
+  source: "John Doe",
+  parts: "123 Main St",
+  eta: "Apt 1",
+  freight: "Anytown",
+  created_at: "NY",
+};
+
+export default async function OrdersDashboard() {
   // Example values for the tickets dashboard (top row variables)
-  const wTickets = Math.floor(Math.random() * 100);
-  const wTicketsLastWeek = Math.floor(Math.random() * 100);
-  const mTickets = wTicketsLastWeek * 4;
-  const mTicketsLastMonth = Math.floor(Math.random() * 1000);
-  const exampleTicket = {
-    customer: "RAPID REPAIR",
-    customerID: "2afa1b1a-4525-45c1-af03-cd191a3efd04",
-    reason: "water pump",
-    year: 2022,
-    make: "Toyota",
-    model: "Corolla",
-    engine: "1.8L",
-    submodel: "LE",
-    notes: ["needs brake pads, rotors, calipers", "found leak", "ordered part"],
-    status: "action",
-    date: "2023-09-10",
-  };
+  const todaysDate = new Date().toLocaleDateString();
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <TopRow
-          wTickets={wTickets}
-          wTicketsLastWeek={wTicketsLastWeek}
-          mTickets={mTickets}
-          mTicketsLastMonth={mTicketsLastMonth}
+          summary={{
+            title: "Orders",
+            desc: "Information about Orders in the system",
+            buttonText: "Create New Orders",
+          }}
         />
         <Tabs defaultValue="week">
           <div className="flex items-center">
@@ -100,7 +95,7 @@ export default async function TicketsDashboard() {
             </div>
           </div>
           <TabsContent value="week">
-            <AllTickets />
+            <AllOrders />
           </TabsContent>
         </Tabs>
       </div>
@@ -109,17 +104,17 @@ export default async function TicketsDashboard() {
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="grid gap-0.5">
               <CardTitle className="group flex items-center gap-2 text-lg">
-                Ticket {exampleTicket.customerID.slice(-7)}
+                Order {exampleOrder.id?.slice(-7)}
                 <Button
                   size="icon"
                   variant="outline"
                   className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
                 >
                   <Copy className="h-3 w-3" />
-                  <span className="sr-only">Copy Ticket ID</span>
+                  <span className="sr-only">Copy Order ID</span>
                 </Button>
               </CardTitle>
-              <CardDescription>Date: July 13, 2024</CardDescription>
+              <CardDescription>Date: {todaysDate}</CardDescription>
             </div>
             <div className="ml-auto flex items-center gap-1">
               {/* <Button size="sm" variant="outline" className="h-8 gap-1">
@@ -148,58 +143,48 @@ export default async function TicketsDashboard() {
           </CardHeader>
           <CardContent className="p-6 text-sm">
             <div className="grid gap-3">
-              <div className="font-semibold">Ticket Details</div>
+              <div className="font-semibold">Order Details</div>
               <dl className="grid gap-3">
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Ticket ID</dt>
-                  <dd>{exampleTicket.customerID.slice(-7)}</dd>
+                  <dt className="text-muted-foreground">Order ID</dt>
+                  <dd>{exampleOrder.id?.slice(-7)}</dd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Status</dt>
-                  <dd>
-                    <span className="text-primary">{exampleTicket.status}</span>
-                  </dd>
+                  <dt className="text-muted-foreground">Source</dt>
+                  <dd>{exampleOrder.source}</dd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Reason</dt>
-                  <dd>{exampleTicket.reason}</dd>
+                  <dt className="text-muted-foreground">Parts</dt>
+                  <dd>{exampleOrder.parts}</dd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Year</dt>
-                  <dd>{exampleTicket.year}</dd>
+                  <dt className="text-muted-foreground">ETA</dt>
+                  <dd>{exampleOrder.eta}</dd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Make</dt>
-                  <dd>{exampleTicket.make}</dd>
+                  <dt className="text-muted-foreground">Freight</dt>
+                  <dd>{exampleOrder.freight}</dd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Model</dt>
-                  <dd>{exampleTicket.model}</dd>
-                </div>
-                <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Engine</dt>
-                  <dd>{exampleTicket.engine}</dd>
-                </div>
-                <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Submodel</dt>
-                  <dd>{exampleTicket.submodel}</dd>
+                  <dt className="text-muted-foreground">Created At</dt>
+                  <dd>{exampleOrder.created_at}</dd>
                 </div>
               </dl>
               <Separator className="my-2" />
-              <div className="font-semibold">Notes</div>
+              <div className="font-semibold">Products in this Order</div>
               <dl className="grid gap-3">
-                {exampleTicket.notes.map((note, i) => (
+                {/* {exampleOrder.notes.map((note, i) => (
                   <div className="flex items-center justify-between" key={i}>
                     <dt className="text-muted-foreground">Note {i + 1}</dt>
                     <dd>{note}</dd>
                   </div>
-                ))}
+                ))} */}
               </dl>
             </div>
           </CardContent>
           <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
             <div className="text-xs text-muted-foreground">
-              Updated <time dateTime="2024-13-24">July 13, 2024</time>
+              Updated <time dateTime={todaysDate}>{todaysDate}</time>
             </div>
             <Pagination className="ml-auto mr-0 w-auto">
               <PaginationContent>

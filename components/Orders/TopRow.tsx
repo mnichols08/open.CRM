@@ -13,7 +13,7 @@ function WeekProgress({}: {}) {
     <Card x-chunk="dashboard-05-chunk-1">
       <CardHeader className="pb-2">
         <CardDescription>This Week</CardDescription>
-        <CardTitle className="text-3xl">Top Active Customer</CardTitle>
+        <CardTitle className="text-3xl">10 Orders</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="text-xs text-muted-foreground">
@@ -37,7 +37,7 @@ function MonthProgress({}: {}) {
     <Card x-chunk="dashboard-05-chunk-3">
       <CardHeader className="pb-2">
         <CardDescription>This Month</CardDescription>
-        <CardTitle className="text-3xl">Highest sale Customer</CardTitle>
+        <CardTitle className="text-3xl">10 Orders</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="text-xs text-muted-foreground">from last month</div>

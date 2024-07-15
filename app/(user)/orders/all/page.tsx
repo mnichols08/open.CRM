@@ -1,5 +1,5 @@
-import AllTickets from "@/components/Tickets/AllTickets";
+import AllOrders from "@/components/Orders/AllOrders";
 
-export default async function TicketsPage() {
-  return <AllTickets />;
+export default async function OrdersPage() {
+  return <AllOrders />;
 }
