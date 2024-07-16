@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopRow from "@/components/Products/TopRow";
+import TopRow from "@/components/TopRow";
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
@@ -58,22 +58,24 @@ export default async function ProductsDashboard() {
         <TopRow
           summary={{
             title: "Products",
-            desc: "Information about Products in the system",
+            description: "Information about Products in the system",
             buttonText: "Create New Product",
+            buttonLink: "/products/create",
+          }}
+          Card1={{
+            title: "This Week",
+            description: "0 products",
+            content: "0 from last week",
+            progress: 0,
+          }}
+          Card2={{
+            title: "This Month",
+            description: "0 products",
+            content: "0 from last month",
+            progress: 0,
           }}
         />
-        <Tabs defaultValue="week">
-          <div className="flex items-center">
-            <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
-            </TabsList>
-          </div>
-          <TabsContent value="week">
-            <AllProducts />
-          </TabsContent>
-        </Tabs>
+        <AllProducts />
       </div>
       <div>
         <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">

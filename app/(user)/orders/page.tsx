@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopRow from "@/components/Orders/TopRow";
+import TopRow from "@/components/TopRow";
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
@@ -35,7 +35,6 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AllOrders from "@/components/Orders/AllOrders";
-// import AllTickets from "@/components/Tickets/AllTickets";
 
 const exampleOrder = {
   id: "12345678",
@@ -55,49 +54,24 @@ export default async function OrdersDashboard() {
         <TopRow
           summary={{
             title: "Orders",
-            desc: "Information about Orders in the system",
+            description: "Information about Orders in the system",
             buttonText: "Create New Orders",
+            buttonLink: "/orders/create",
+          }}
+          Card1={{
+            title: "This Week",
+            description: "0 orders",
+            content: "0 from last week",
+            progress: 0,
+          }}
+          Card2={{
+            title: "This Month",
+            description: "0 orders",
+            content: "0 from last month",
+            progress: 0,
           }}
         />
-        <Tabs defaultValue="week">
-          <div className="flex items-center">
-            <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
-            </TabsList>
-            <div className="ml-auto flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 gap-1 text-sm"
-                  >
-                    <ListFilter className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Filter</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    Fulfilled
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Declined</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Export</span>
-              </Button>
-            </div>
-          </div>
-          <TabsContent value="week">
-            <AllOrders />
-          </TabsContent>
-        </Tabs>
+        <AllOrders />
       </div>
       <div>
         <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
