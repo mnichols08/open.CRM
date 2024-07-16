@@ -12,17 +12,17 @@ import { Button } from "@/components/ui/button";
 
 import type { Summary } from "@/lib/definitions";
 
-const Summary: React.FC<Summary> = ({ title, desc, buttonText }) => {
+const Summary: React.FC<Summary> = ({ title, description, buttonText, buttonLink }) => {
   return (
     <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
       <CardHeader className="pb-3">
         <CardTitle>{title}</CardTitle>
         <CardDescription className="max-w-lg text-balance leading-relaxed">
-          {desc}
+          {description}
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href={`/${title?.toLowerCase()}/create`} passHref>
+        <Link href={buttonLink} passHref>
           <Button>{buttonText}</Button>
         </Link>
       </CardFooter>

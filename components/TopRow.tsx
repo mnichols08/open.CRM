@@ -19,7 +19,7 @@ export default function TopRow({
     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
       <Summary
         title={summary.title}
-        desc={summary.description}
+        description={summary.description}
         buttonText={summary.buttonText}
         buttonLink={summary.buttonLink}
       />

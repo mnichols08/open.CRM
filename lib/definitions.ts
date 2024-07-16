@@ -4,7 +4,7 @@
 // However, these types are generated automatically if you're using an ORM such as Prisma.
 export type Summary = {
   title: string | null;
-  desc: string | null;
+  description: string | null;
   buttonText: string | null;
   buttonLink: string;
 };

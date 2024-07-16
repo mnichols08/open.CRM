@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopRow from "@/components/Dashboard/TopRow";
+import TopRow from "@/components/TopRow";
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
@@ -55,19 +55,20 @@ export default async function TicketsDashboard() {
     status: "action",
     date: "2023-09-10",
   };
+  const nTickets = Math.floor(Math.random() * 100)
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <TopRow
-          wTickets={wTickets}
-          wTicketsLastWeek={wTicketsLastWeek}
-          mTickets={mTickets}
-          mTicketsLastMonth={mTicketsLastMonth}
           summary={{
-            title: "Tickets",
-            desc: "Introducing Our Dynamic Tickets Dashboard for Seamless Management and Insightful Analysis.",
+            title: "User Dashboard",
+            description: "Introducing the User Dashboard for Seamless Management and Insightful Analysis. When this is finished expect a lot of cool features and functionality.",
             buttonText: "Create New Ticket",
+            buttonLink: "/tickets/new",
           }}
+          Card1={{title: "Recent Ticket", description: exampleTicket.reason, content: exampleTicket.customer, progress: nTickets}}
+          Card2={{title: "Orders", description: "", content: "", progress: nTickets}}
+  
         />
         <Tabs defaultValue="week">
           <div className="flex items-center">
