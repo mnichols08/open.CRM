@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-import type { Summary } from "./definitions";
+import type { Summary } from "@/lib/definitions";
 
 const Summary: React.FC<Summary> = ({ title, desc, buttonText }) => {
   return (
