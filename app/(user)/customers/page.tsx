@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopRow from "@/components/Customers/TopRow";
+import TopRow from "@/components/TopRow";
 import { Separator } from "@/components/ui/separator";
 import AllCustomers from "@/components/Customers/AllCustomers";
 import { ChevronLeft, ChevronRight, Copy, MoreVertical } from "lucide-react";
@@ -25,7 +25,7 @@ import {
   PaginationItem,
 } from "@/components/ui/pagination";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { sql } from "@vercel/postgres";
+
 import { Customer } from "@/lib/definitions";
 
 const exampleCustomer: Customer = {
@@ -42,29 +42,30 @@ const exampleCustomer: Customer = {
 };
 
 export default async function Dashboard() {
-  const todaysdate = new Date().toLocaleDateString();
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <TopRow
           summary={{
             title: "Customers",
-            desc: "View and manage all customers",
+            description: "View and manage all customers",
             buttonText: "Create Customer",
+            buttonLink: "/customers/create",
+          }}
+          Card1={{
+            title: "This Week",
+            description: "0 customers",
+            content: "0 from last week",
+            progress: 0,
+          }}
+          Card2={{
+            title: "This Month",
+            description: "0 customers",
+            content: "0 from last month",
+            progress: 0,
           }}
         />
-        <Tabs defaultValue="week">
-          <div className="flex items-center">
-            <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
-            </TabsList>
-          </div>
-          <TabsContent value="week">
-            <AllCustomers />
-          </TabsContent>
-        </Tabs>
+        <AllCustomers />
       </div>
       <div>
         <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
@@ -81,7 +82,7 @@ export default async function Dashboard() {
                   <span className="sr-only">Copy Customer ID</span>
                 </Button>
               </CardTitle>
-              <CardDescription>Date: {todaysdate}</CardDescription>
+              <CardDescription>Date: {new Date().getDate()}</CardDescription>
             </div>
             <div className="ml-auto flex items-center gap-1">
               {/* <Button size="sm" variant="outline" className="h-8 gap-1">
