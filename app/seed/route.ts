@@ -126,7 +126,6 @@ async function seedProducts() {
             linecode varchar(255) NOT NULL,
             partnumber varchar(255) NOT NULL,
             name varchar(255) NOT NULL,
-            order_id UUID NOT NULL,
             cost DECIMAL NOT NULL,
             quoted_price DECIMAL NOT NULL,
             extra_cost DECIMAL NOT NULL,

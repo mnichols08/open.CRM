@@ -11,38 +11,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function CreateCustomerPage() {
+export default function EditCustomerPage(formData: any) {
   return (
     <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="w-full max-w-4xl">
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>
-            <CardTitle>Product Details</CardTitle>
-            <CardDescription>Input details about this product.</CardDescription>
+            <CardTitle>Customer Details</CardTitle>
+            <CardDescription>
+              Update details about this customer.
+            </CardDescription>
           </CardHeader>
 
           <CardContent>
             <div className="grid gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="linecode">Line Code</Label>
-                <Input
-                  id="linecode"
-                  type="text"
-                  className="w-full"
-                  defaultValue=""
-                  placeholder="Line Code of the product"
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="partnumber">Part Number</Label>
-                <Input
-                  id="partnumber"
-                  type="text"
-                  className="w-full"
-                  defaultValue=""
-                  placeholder="Part Number of the product"
-                />
-              </div>
               <div className="grid gap-3">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -50,57 +32,63 @@ export default function CreateCustomerPage() {
                   type="text"
                   className="w-full"
                   defaultValue=""
-                  placeholder="Name of the product"
+                  placeholder="Give a general reason for opening this ticket"
                 />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="cost">Cost</Label>
+                <Label htmlFor="address1">Address 1</Label>
                 <Input
-                  id="cost"
                   type="text"
-                  className="w-full"
-                  defaultValue=""
-                  placeholder="Cost of the product"
+                  id="address1"
+                  placeholder="Enter 1st Address line"
                 />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="quoted_price">Quoted Price</Label>
+                <Label htmlFor="address2">Address 2</Label>
                 <Input
-                  id="quoted_price"
                   type="text"
-                  className="w-full"
-                  defaultValue=""
-                  placeholder="Quoted Price of the product"
+                  id="address2"
+                  placeholder="Enter 2nd Address line"
                 />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="extra_cost">Extra Cost</Label>
+                <Label htmlFor="city">City</Label>
                 <Input
-                  id="extra_cost"
                   type="text"
-                  className="w-full"
-                  defaultValue=""
-                  placeholder="Extra Cost of the product"
+                  id="city"
+                  placeholder="Enter a Customer City"
                 />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="source">Source</Label>
+                <Label htmlFor="state">State</Label>
                 <Input
-                  id="source"
                   type="text"
-                  className="w-full"
-                  defaultValue=""
-                  placeholder="Source of the product"
+                  id="state"
+                  placeholder="Enter a Customer State"
                 />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="zip">Zip</Label>
                 <Input
-                  id="description"
                   type="text"
-                  className="w-full"
-                  defaultValue=""
-                  placeholder="Description of the product"
+                  id="zip"
+                  placeholder="Enter a Customer Zip"
+                />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="country">Country</Label>
+                <Input
+                  type="text"
+                  id="country"
+                  placeholder="Enter a Customer Country"
+                />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="phone">Phone</Label>
+                <Input
+                  type="text"
+                  id="phone"
+                  placeholder="Enter a Customer Phone"
                 />
               </div>
             </div>
@@ -111,7 +99,7 @@ export default function CreateCustomerPage() {
           <Button variant="outline" size="sm">
             Discard
           </Button>
-          <Button size="sm">Update Product</Button>
+          <Button size="sm">Update Customer</Button>
         </div>
       </div>
     </main>
