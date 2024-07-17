@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopRow from "@/components/Dashboard/TopRow";
+import TopRow from "@/components/TopRow";
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
@@ -39,9 +39,9 @@ import AllTickets from "@/components/Tickets/AllTickets";
 export default async function TicketsDashboard() {
   // Example values for the tickets dashboard (top row variables)
   const wTickets = Math.floor(Math.random() * 100);
-  const wTicketsLastWeek = Math.floor(Math.random() * 100);
-  const mTickets = wTicketsLastWeek * 4;
-  const mTicketsLastMonth = Math.floor(Math.random() * 1000);
+  const wTicketsLast = Math.floor(Math.random() * 100);
+  const mTickets = wTicketsLast * 4;
+  const mTicketsLast = Math.floor(Math.random() * 1000);
   const exampleTicket = {
     customer: "RAPID REPAIR",
     customerID: "2afa1b1a-4525-45c1-af03-cd191a3efd04",
@@ -55,54 +55,62 @@ export default async function TicketsDashboard() {
     status: "action",
     date: "2023-09-10",
   };
+  const improvement = (nTickets: number, nTicketsLast: number) => Math.round(
+        ((nTickets - nTicketsLast) / nTicketsLast) * 100
+      );
+    const weekImprovement = improvement(wTickets, wTicketsLast);
+    const monthImprovement = improvement(mTickets, mTicketsLast);
+    const progress = (improvement: number) => improvement > 0 ? improvement : 0;
+      // const isIncPositive = (inc: num) => inc > 0;
+      // const improvementText =( val: num) => isIncPositive(val)
+      //   ? `+${val}`
+      //   : improvement;
+
+// {
+    //   const improvement = Math.round(
+    //     ((nTickets - nTicketsLastMonth) / nTicketsLastMonth) * 100
+    //   );
+    //   const isImprovementPositive = improvement > 0;
+    //   const improvementText = isImprovementPositive
+    //     ? `+${improvement}`
+    //     : improvement;
+    //   return (
+    //     <Card x-chunk="dashboard-05-chunk-3">
+    //       <CardHeader className="pb-2">
+    //         <CardDescription>This Month</CardDescription>
+    //         <CardTitle className="text-3xl">{nTickets} Tickets</CardTitle>
+    //       </CardHeader>
+    //       <CardContent>
+    //         <div className="text-xs text-muted-foreground">
+    //           {improvementText}% from last month
+    //         </div>
+    //       </CardContent>
+    //       <CardFooter>
+    //         <Progress
+    //           value={improvement}
+    //           aria-label={`${improvement}% ${
+    //             isImprovementPositive ? "increase" : "decrease"
+    //           }`}
+    //         />
+    //       </CardFooter>
+    //     </Card>
+    //   );
+    // }
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <TopRow
-          wTickets={wTickets}
-          wTicketsLastWeek={wTicketsLastWeek}
-          mTickets={mTickets}
-          mTicketsLastMonth={mTicketsLastMonth}
+          summary={{
+            title: "Tickets",
+            description: "View and manage all tickets",
+            buttonText: "Create Ticket",
+            buttonLink: "/tickets/create",
+          }}
+          Card1={{title: "This Week", description: `${wTickets} tickets`, content: `${wTickets - wTicketsLast} from last week`, progress: weekImprovement}}
+          Card2={{title: "This Month", description: `${wTickets} tickets`, content: `${mTickets - mTicketsLast} from last month`, progress: monthImprovement}}
         />
-        <Tabs defaultValue="week">
-          <div className="flex items-center">
-            <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
-            </TabsList>
-            <div className="ml-auto flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 gap-1 text-sm"
-                  >
-                    <ListFilter className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Filter</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    Fulfilled
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Declined</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Export</span>
-              </Button>
-            </div>
-          </div>
-          <TabsContent value="week">
-            <AllTickets />
-          </TabsContent>
-        </Tabs>
+        
+        <AllTickets />
       </div>
       <div>
         <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">

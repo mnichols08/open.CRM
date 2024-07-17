@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopRow from "@/components/Dashboard/TopRow";
+import TopRow from "@/components/TopRow";
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
@@ -7,7 +7,6 @@ import {
   Copy,
   File,
   ListFilter,
-  MoreHorizontal,
   MoreVertical,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,25 +32,19 @@ import {
   PaginationContent,
   PaginationItem,
 } from "@/components/ui/pagination";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { sql } from "@vercel/postgres";
-import { Ticket } from "../../lib/definitions";
 
-export default async function Dashboard() {
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AllTickets from "@/components/Tickets/AllTickets";
+import AllCustomers from "@/components/Customers/AllCustomers";
+import AllOrders from "@/components/Orders/AllOrders";
+import AllProducts from "@/components/Products/AllProducts";
+
+export default async function TicketsDashboard() {
   // Example values for the tickets dashboard (top row variables)
   const wTickets = Math.floor(Math.random() * 100);
-  const wTicketsLastWeek = Math.floor(Math.random() * 100);
-  const mTickets = wTicketsLastWeek * 4;
-  const mTicketsLastMonth = Math.floor(Math.random() * 1000);
-  const data = await sql<Ticket>`SELECT * FROM tickets`;
+  const wTicketsLast = Math.floor(Math.random() * 100);
+  const mTickets = wTicketsLast * 4;
+  const mTicketsLast = Math.floor(Math.random() * 1000);
   const exampleTicket = {
     customer: "RAPID REPAIR",
     customerID: "2afa1b1a-4525-45c1-af03-cd191a3efd04",
@@ -65,118 +58,49 @@ export default async function Dashboard() {
     status: "action",
     date: "2023-09-10",
   };
+  const improvement = (nTickets: number, nTicketsLast: number) => Math.round(
+    ((nTickets - nTicketsLast) / nTicketsLast) * 100
+  );
+const weekImprovement = improvement(wTickets, wTicketsLast);
+const monthImprovement = improvement(mTickets, wTicketsLast);
+const progress = (improvement: number) => improvement > 0 ? improvement : .1;
+  const nTickets = Math.floor(Math.random() * 100);
+  const mProgress = progress(monthImprovement);
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <TopRow
-          wTickets={wTickets}
-          wTicketsLastWeek={wTicketsLastWeek}
-          mTickets={mTickets}
-          mTicketsLastMonth={mTicketsLastMonth}
+          summary={{
+            title: "User Dashboard",
+            description: "Introducing the User Dashboard for Seamless Management and Insightful Analysis. When this is finished expect a lot of cool features and functionality.",
+            buttonText: "Create New Ticket",
+            buttonLink: "/tickets/create",
+          }}
+          Card1={{title: "Recent Ticket", description: exampleTicket.reason, content: exampleTicket.customer, progress: nTickets}}
+          Card2={{title: "This Month", description: `${mTickets} tickets`, content: `${mProgress > 0 ? '' : ''}${mTickets - mTicketsLast}% from last month`, progress: mProgress }}
+
+  
         />
-        <Tabs defaultValue="week">
+        <Tabs defaultValue="tickets">
           <div className="flex items-center">
             <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
+              <TabsTrigger value="tickets">Tickets</TabsTrigger>
+              <TabsTrigger value="customers">Customers</TabsTrigger>
+              <TabsTrigger value="orders">Orders</TabsTrigger>
+              <TabsTrigger value="products">Products</TabsTrigger>
             </TabsList>
-            <div className="ml-auto flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 gap-1 text-sm"
-                  >
-                    <ListFilter className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Filter</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    Fulfilled
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Declined</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Export</span>
-              </Button>
-            </div>
           </div>
-          <TabsContent value="week">
-            <Card x-chunk="dashboard-05-chunk-3">
-              <CardHeader className="px-7">
-                <CardTitle>Tickets</CardTitle>
-                <CardDescription>Recent tickets or inquiry.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Id</TableHead>
-                      <TableHead>
-                        <span className="sr-only">Reason</span>
-                      </TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Year</TableHead>
-                      <TableHead>Make</TableHead>
-                      <TableHead>Model</TableHead>
-                      <TableHead>Engine</TableHead>
-                      <TableHead>Submodel</TableHead>
-                      <TableHead>Created By </TableHead>
-                      <TableHead>Customer Id</TableHead>
-                      <TableHead>
-                        <span className="sr-only">Actions</span>
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-
-                  <TableBody>
-                    {data.rows.map((ticket) => (
-                      <TableRow key={ticket.id}>
-                        <TableCell>{ticket.id}</TableCell>
-                        <TableCell>{ticket.reason}</TableCell>
-                        <TableCell>{ticket.status}</TableCell>
-                        <TableCell>{ticket.year}</TableCell>
-                        <TableCell>{ticket.make}</TableCell>
-                        <TableCell>{ticket.model}</TableCell>
-                        <TableCell>{ticket.engine}</TableCell>
-                        <TableCell>{ticket.submodel}</TableCell>
-                        <TableCell>{ticket.created_by}</TableCell>
-                        <TableCell>{ticket.customer_id}</TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <Link href="/tickets/edit">
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
-                              </Link>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+          <TabsContent value="tickets">
+            <AllTickets />
+          </TabsContent>
+          <TabsContent value="customers">
+            <AllCustomers />
+          </TabsContent>
+          <TabsContent value="orders">
+            <AllOrders />
+          </TabsContent>
+          <TabsContent value="products">
+            <AllProducts />
           </TabsContent>
         </Tabs>
       </div>

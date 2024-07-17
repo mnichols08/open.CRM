@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,13 +31,24 @@ import {
   Search,
   ShoppingCart,
   Users2,
+  CircleUser,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 export default function Header() {
   const pathname = usePathname();
-  const breadcrumbs = pathname.split("/").filter((item) => item !== "" && item !== "dashboard");
-  const breadcrumb = breadcrumbs.map((item) => item.charAt(0).toUpperCase() + item.slice(1));
+  const breadcrumbs = pathname
+    .split("/")
+    .filter(
+      (item) =>
+        item !== "" &&
+        item !== "dashboard" &&
+        item !== "sign-in" &&
+        item !== "sign-up"
+    );
+  const breadcrumb = breadcrumbs.map(
+    (item) => item.charAt(0).toUpperCase() + item.slice(1)
+  );
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
@@ -123,18 +134,9 @@ export default function Header() {
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="overflow-hidden rounded-full"
-          >
-            <Image
-              src="/placeholder-user.jpg"
-              width={36}
-              height={36}
-              alt="Avatar"
-              className="overflow-hidden rounded-full"
-            />
+          <Button variant="secondary" size="icon" className="rounded-full">
+            <CircleUser className="h-5 w-5" />
+            <span className="sr-only">Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -145,7 +147,9 @@ export default function Header() {
           </DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <Link href="/sign-out">
+            <DropdownMenuItem>Logout</DropdownMenuItem>
+          </Link>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

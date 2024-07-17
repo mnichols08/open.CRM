@@ -3,7 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
 import { sql } from '@vercel/postgres';
-import type { User } from '@/app/lib/definitions';
+import type { User } from '@/lib/definitions';
 
 import bcrypt from 'bcrypt';
  
@@ -17,7 +17,7 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
  
-export const { auth, signIn, signOut } = NextAuth({
+export const { auth, signIn, signOut, } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -25,7 +25,6 @@ export const { auth, signIn, signOut } = NextAuth({
         const parsedCredentials = z
           .object({ email: z.string().email(), password: z.string().min(6) })
           .safeParse(credentials);
-          console.log(parsedCredentials);
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
           const user = await getUser(email);
@@ -40,6 +39,18 @@ export const { auth, signIn, signOut } = NextAuth({
     }),
   ],
 });
+
+export const register = async (credentials: { email: string; password: string, name: string }) => {
+  const hashedPassword = await bcrypt.hash(credentials.password, 10);
+  try {
+    if (await getUser(credentials.email)) {
+      throw new Error('User already exists.');
+    } else await sql<User>`INSERT INTO users (email, password, name) VALUES (${credentials.email}, ${hashedPassword}, ${credentials.name})`;
+  } catch (error) {
+    console.error('Failed to register user:', error);
+    throw new Error('Failed to register user.');
+  }
+};
 
 export const config = {
   trustHost: true,
