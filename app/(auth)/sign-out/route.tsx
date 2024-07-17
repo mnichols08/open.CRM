@@ -6,6 +6,7 @@ export async function GET(req: any, res: any) {
     res.writeHead(302, {
       Location: "/",
     });
+    res.redirect("/");
     res.end();
   } else {
     res.writeHead(500, {
