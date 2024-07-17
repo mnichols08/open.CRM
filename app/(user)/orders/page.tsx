@@ -105,7 +105,7 @@ export default async function OrdersDashboard() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <Link href="/tickets/edit">
+                  <Link href="/orders/edit">
                     <DropdownMenuItem>Edit</DropdownMenuItem>
                   </Link>
                   <DropdownMenuItem>Export</DropdownMenuItem>
