@@ -31,6 +31,7 @@ import {
   Search,
   ShoppingCart,
   Users2,
+  CircleUser,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
@@ -38,7 +39,13 @@ export default function Header() {
   const pathname = usePathname();
   const breadcrumbs = pathname
     .split("/")
-    .filter((item) => item !== "" && item !== "dashboard" && item !== "sign-in" && item !== "sign-up");
+    .filter(
+      (item) =>
+        item !== "" &&
+        item !== "dashboard" &&
+        item !== "sign-in" &&
+        item !== "sign-up"
+    );
   const breadcrumb = breadcrumbs.map(
     (item) => item.charAt(0).toUpperCase() + item.slice(1)
   );
@@ -127,18 +134,9 @@ export default function Header() {
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="overflow-hidden rounded-full"
-          >
-            <Image
-              src="/placeholder-user.jpg"
-              width={36}
-              height={36}
-              alt="Avatar"
-              className="overflow-hidden rounded-full"
-            />
+          <Button variant="secondary" size="icon" className="rounded-full">
+            <CircleUser className="h-5 w-5" />
+            <span className="sr-only">Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
