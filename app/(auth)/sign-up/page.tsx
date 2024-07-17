@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,25 +10,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { register } from "@/lib/actions";
+import { useFormState } from "react-dom";
 
 export default function SignUpForm() {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    try {
-      const result = await register(formData);
-      if (result) {
-        setErrorMessage(result);
-      }
-    } catch (error) {
-      setErrorMessage('An unexpected error occurred.');
-    }
-  };
-
+  const [errorMessage, dispatch] = useFormState(register, undefined);
   return (
-    <form onSubmit={handleSubmit}>
+    <form action={dispatch}>
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>

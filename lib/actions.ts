@@ -23,7 +23,7 @@ export async function authenticate(
   }
 }
 
-export async function register(formData: FormData) {
+export async function register(prevState: string | undefined, formData: FormData) {
   try {
     const firstName = formData.get('first-name') as string;
     const lastName = formData.get('last-name') as string;
@@ -33,7 +33,8 @@ export async function register(formData: FormData) {
       password: formData.get('password') as string,
     };
     await authRegister(credentials);
-    revalidatePath('/'); // Revalidate the cache for the home page or any other relevant path
+    await authenticate(undefined, formData);
+    revalidatePath('/');
     redirect('/');
   } catch (error) {
     if (error instanceof AuthError) {

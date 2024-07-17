@@ -43,7 +43,9 @@ export const { auth, signIn, signOut, } = NextAuth({
 export const register = async (credentials: { email: string; password: string, name: string }) => {
   const hashedPassword = await bcrypt.hash(credentials.password, 10);
   try {
-    await sql<User>`INSERT INTO users (email, password, name) VALUES (${credentials.email}, ${hashedPassword}, ${credentials.name})`;
+    if (await getUser(credentials.email)) {
+      throw new Error('User already exists.');
+    } else await sql<User>`INSERT INTO users (email, password, name) VALUES (${credentials.email}, ${hashedPassword}, ${credentials.name})`;
   } catch (error) {
     console.error('Failed to register user:', error);
     throw new Error('Failed to register user.');

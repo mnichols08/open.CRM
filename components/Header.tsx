@@ -38,7 +38,7 @@ export default function Header() {
   const pathname = usePathname();
   const breadcrumbs = pathname
     .split("/")
-    .filter((item) => item !== "" && item !== "dashboard");
+    .filter((item) => item !== "" && item !== "dashboard" && item !== "sign-in" && item !== "sign-up");
   const breadcrumb = breadcrumbs.map(
     (item) => item.charAt(0).toUpperCase() + item.slice(1)
   );
