@@ -1,4 +1,5 @@
 import { signOut } from "@/auth";
+import { redirect } from "next/navigation";
 
 export async function GET(req: any, res: any) {
   const signedOut = await signOut();
@@ -6,7 +7,7 @@ export async function GET(req: any, res: any) {
     res.writeHead(302, {
       Location: "/",
     });
-    res.end();
+    redirect("/");
   } else {
     res.writeHead(500, {
       "Content-Type": "application/json",

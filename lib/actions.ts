@@ -1,10 +1,9 @@
 'use server';
- 
-import { signIn } from '@/auth';
+import { signIn, register as authRegister } from '@/auth';
 import { AuthError } from 'next-auth';
- 
-// ...
- 
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
@@ -24,11 +23,18 @@ export async function authenticate(
   }
 }
 
-export async function register(
-  formData: FormData,
-) {
+export async function register(formData: FormData) {
   try {
-    await signIn('credentials', formData);
+    const firstName = formData.get('first-name') as string;
+    const lastName = formData.get('last-name') as string;
+    const credentials = {
+      name: `${firstName} ${lastName}`,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    };
+    await authRegister(credentials);
+    revalidatePath('/'); // Revalidate the cache for the home page or any other relevant path
+    redirect('/');
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
