@@ -54,12 +54,6 @@ export async function register(
   }
 }
 
-export async function signOut() {
-  await signOut();
-  revalidatePath("/");
-  redirect("/");
-}
-
 export async function checkIfAdmin() {
   const client = await db.connect();
   const data =
