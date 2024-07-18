@@ -17,6 +17,13 @@ export type User = {
   is_admin: boolean;
 };
 
+export type Session = {
+  user?: {
+    email?: string;
+    name?: string;
+  };
+};
+
 export type Customer = {
   id: string | null;
   name: string | null;
