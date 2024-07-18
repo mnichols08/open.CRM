@@ -14,6 +14,7 @@ export type User = {
   name: string;
   email: string;
   password: string;
+  is_admin: boolean;
 };
 
 export type Customer = {
