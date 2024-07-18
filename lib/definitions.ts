@@ -17,12 +17,13 @@ export type User = {
   is_admin: boolean;
 };
 
-export type Session = {
+export interface Session {
   user?: {
-    email?: string;
-    name?: string;
+    email?: string | null;
+    name?: string | null;
   };
-};
+  expires: string;
+}
 
 export type Customer = {
   id: string | null;
