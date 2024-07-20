@@ -60,6 +60,37 @@ export async function checkIfAdmin() {
     await client.sql<User>`SELECT * FROM users WHERE is_admin = true`;
   const adminUsers = data.rows;
   const session: Session | null | undefined = await auth();
-  const isAdmin: boolean = adminUsers.some((user: User) => user.email === session?.user?.email);
+  const isAdmin: boolean = adminUsers.some(
+    (user: User) => user.email === session?.user?.email
+  );
   return isAdmin;
+}
+
+const createTicket = async (ticket: { customer: string; reason: string }) => {
+  return "success";
+};
+
+export async function saveTicket(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    const ticket = {
+      customer: formData.get("customer") as string,
+      reason: formData.get("name") as string,
+    };
+    await createTicket(ticket);
+    revalidatePath("/tickets");
+    redirect("/tickets");
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
 }
