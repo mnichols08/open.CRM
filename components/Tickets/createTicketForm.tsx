@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import CustomerDropDown from "@/components/CustomerDropDown";
 import { Textarea } from "@/components/ui/textarea";
 import { saveTicket } from "@/lib/actions";
 import { useFormState } from "react-dom";
@@ -48,15 +47,15 @@ export default function CreateTicketPage({
                   <div className="grid gap-6">
                     <div className="grid gap-3">
                       <Label htmlFor="customer">Customer</Label>
-                      {/* <CustomerDropDown selectedCustomer={undefined} /> */}
                       {children}
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="name">Reason</Label>
                       <Input
-                        id="name"
+                        id="reason"
                         type="text"
                         className="w-full"
+                        name="reason"
                         defaultValue=""
                         placeholder="Give a general reason for opening this ticket"
                       />
@@ -77,6 +76,7 @@ export default function CreateTicketPage({
                     <Input
                       type="number"
                       id="year"
+                      name="year"
                       placeholder="Enter a Vehicle Year"
                     />
                   </div>
@@ -85,6 +85,7 @@ export default function CreateTicketPage({
                     <Input
                       type="text"
                       id="make"
+                      name="make"
                       placeholder="Enter a Vehicle Make"
                     />
                   </div>
@@ -93,6 +94,7 @@ export default function CreateTicketPage({
                     <Input
                       type="text"
                       id="model"
+                      name="model"
                       placeholder="Enter a Vehicle Model"
                     />
                   </div>
@@ -101,6 +103,7 @@ export default function CreateTicketPage({
                     <Input
                       type="text"
                       id="submodel"
+                      name="submodel"
                       placeholder="Enter a Vehicle Sub Model"
                     />
                   </div>
@@ -109,6 +112,7 @@ export default function CreateTicketPage({
                     <Input
                       type="text"
                       id="engine"
+                      name="engine"
                       placeholder="Enter a Vehicle Engine"
                     />
                   </div>
@@ -123,6 +127,7 @@ export default function CreateTicketPage({
                     id="description"
                     defaultValue=""
                     placeholder="Add any notes about this ticket"
+                    name="description"
                     className="min-h-32"
                   />
                 </CardContent>
@@ -143,14 +148,16 @@ export default function CreateTicketPage({
                   <div className="grid gap-6">
                     <div className="grid gap-3">
                       <Label htmlFor="status">Status</Label>
-                      <Select>
+                      <Select name="status">
                         <SelectTrigger id="status" aria-label="Select status">
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="active">In Progress</SelectItem>
-                          <SelectItem value="action">Action Needed</SelectItem>
-                          <SelectItem value="archived">Archived</SelectItem>
+                          <SelectItem value="open">In Progress</SelectItem>
+                          <SelectItem value="helpWanted">
+                            Action Needed
+                          </SelectItem>
+                          <SelectItem value="closed">Archived</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -173,6 +180,7 @@ export default function CreateTicketPage({
                         id="link"
                         type="url"
                         placeholder="https://example.com"
+                        name="link"
                       />
                     </div>
                     <Button size="sm" variant="secondary">

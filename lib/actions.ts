@@ -66,8 +66,41 @@ export async function checkIfAdmin() {
   return isAdmin;
 }
 
-const createTicket = async (ticket: { customer: string; reason: string }) => {
-  return "success";
+/**
+ *
+ * // ${formData.get("reason")} as string, 
+      // ${formData.get("status")},
+      //  ${formData.get("year")}, 
+      //  ${formData.get("make")}, 
+      //  ${formData.get("model")}, 
+      //  ${formData.get("engine")}, 
+      //  ${formData.get("submodel")}, 
+      //  ${formData.get("created_by")}, 
+      //  ${formData.get("customer_id")}
+ *
+ */
+const createTicket = async (ticket: {
+  reason: string;
+  status: string;
+  year: string;
+  make: string;
+  model: string;
+  engine: string;
+  submodel: string;
+  created_by: string;
+  customer_id: string;
+}) => {
+  // const createTicket = async (formData: FormData) => {
+  const session: Session | null | undefined = await auth();
+  const user: User = session?.user as User;
+  const client = await db.connect();
+  const data = await client.sql`
+    INSERT INTO tickets (reason, status, year, make, model, engine, submodel, created_by, customer_id)
+    VALUES (
+      ${ticket.reason}, ${ticket.status}, ${ticket.year}, ${ticket.make}, ${ticket.model}, ${ticket.engine}, ${ticket.submodel}, ${user.id}, ${ticket.customer_id}
+     )
+      ON CONFLICT (id) DO NOTHING;
+  `;
 };
 
 export async function saveTicket(
@@ -76,8 +109,15 @@ export async function saveTicket(
 ) {
   try {
     const ticket = {
-      customer: formData.get("customer") as string,
-      reason: formData.get("name") as string,
+      customer_id: formData.get("customer") as string,
+      reason: formData.get("reason") as string,
+      status: formData.get("status") as string,
+      year: formData.get("year") as string,
+      make: formData.get("make") as string,
+      model: formData.get("model") as string,
+      engine: formData.get("engine") as string,
+      submodel: formData.get("submodel") as string,
+      created_by: formData.get("created_by") as string,
     };
     await createTicket(ticket);
     revalidatePath("/tickets");
