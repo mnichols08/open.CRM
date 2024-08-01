@@ -104,7 +104,7 @@ export default async function AllOrders() {
                   <TableCell>Parts</TableCell>
                   <TableCell>ETA</TableCell>
                   <TableCell>Freight</TableCell>
-                  <TableCell>Created At</TableCell>
+                  {/* <TableCell>Created At</TableCell> */}
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHeader>
@@ -117,7 +117,7 @@ export default async function AllOrders() {
                     <TableCell>{order.parts}</TableCell>
                     <TableCell>{order.eta}</TableCell>
                     <TableCell>{order.freight}</TableCell>
-                    <TableCell>{order.created_at}</TableCell>
+                    {/* <TableCell>{order.created_at}</TableCell> */}
 
                     <TableCell>
                       <DropdownMenu>
