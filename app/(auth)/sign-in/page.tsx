@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { authenticate } from "@/lib/actions";
 
 export default function LoginForm() {
-    const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
   return (
     <form action={dispatch}>
       <Card className="mx-auto max-w-sm">

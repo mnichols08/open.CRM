@@ -14,7 +14,16 @@ export type User = {
   name: string;
   email: string;
   password: string;
+  is_admin: boolean;
 };
+
+export interface Session {
+  user?: {
+    email?: string | null;
+    name?: string | null;
+  };
+  expires: string;
+}
 
 export type Customer = {
   id: string | null;

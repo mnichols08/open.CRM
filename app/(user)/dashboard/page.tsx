@@ -38,6 +38,8 @@ import AllTickets from "@/components/Tickets/AllTickets";
 import AllCustomers from "@/components/Customers/AllCustomers";
 import AllOrders from "@/components/Orders/AllOrders";
 import AllProducts from "@/components/Products/AllProducts";
+import AllUsers from "@/components/Users/AllUsers";
+import { checkIfAdmin } from "@/lib/actions";
 
 export default async function TicketsDashboard() {
   // Example values for the tickets dashboard (top row variables)
@@ -58,12 +60,13 @@ export default async function TicketsDashboard() {
     status: "action",
     date: "2023-09-10",
   };
-  const improvement = (nTickets: number, nTicketsLast: number) => Math.round(
-    ((nTickets - nTicketsLast) / nTicketsLast) * 100
-  );
-const weekImprovement = improvement(wTickets, wTicketsLast);
-const monthImprovement = improvement(mTickets, wTicketsLast);
-const progress = (improvement: number) => improvement > 0 ? improvement : .1;
+  const improvement = (nTickets: number, nTicketsLast: number) =>
+    Math.round(((nTickets - nTicketsLast) / nTicketsLast) * 100);
+  const isAdmin = await checkIfAdmin();
+  const weekImprovement = improvement(wTickets, wTicketsLast);
+  const monthImprovement = improvement(mTickets, wTicketsLast);
+  const progress = (improvement: number) =>
+    improvement > 0 ? improvement : 0.1;
   const nTickets = Math.floor(Math.random() * 100);
   const mProgress = progress(monthImprovement);
   return (
@@ -71,25 +74,42 @@ const progress = (improvement: number) => improvement > 0 ? improvement : .1;
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <TopRow
           summary={{
-            title: "User Dashboard",
-            description: "Introducing the User Dashboard for Seamless Management and Insightful Analysis. When this is finished expect a lot of cool features and functionality.",
+            title: isAdmin ? "Admin Dashboard" : "User Dashboard",
+            description:
+              "Introducing the User Dashboard for Seamless Management and Insightful Analysis. When this is finished expect a lot of cool features and functionality.",
             buttonText: "Create New Ticket",
             buttonLink: "/tickets/create",
           }}
-          Card1={{title: "Recent Ticket", description: exampleTicket.reason, content: exampleTicket.customer, progress: nTickets}}
-          Card2={{title: "This Month", description: `${mTickets} tickets`, content: `${mProgress > 0 ? '' : ''}${mTickets - mTicketsLast}% from last month`, progress: mProgress }}
-
-  
+          Card1={{
+            title: "Recent Ticket",
+            description: exampleTicket.reason,
+            content: exampleTicket.customer,
+            progress: nTickets,
+          }}
+          Card2={{
+            title: "This Month",
+            description: `${mTickets} tickets`,
+            content: `${mProgress > 0 ? "" : ""}${
+              mTickets - mTicketsLast
+            }% from last month`,
+            progress: mProgress,
+          }}
         />
-        <Tabs defaultValue="tickets">
+        <Tabs defaultValue={isAdmin ? "users" : "tickets"}>
           <div className="flex items-center">
             <TabsList>
+              {isAdmin && <TabsTrigger value="users">Users</TabsTrigger>}
               <TabsTrigger value="tickets">Tickets</TabsTrigger>
               <TabsTrigger value="customers">Customers</TabsTrigger>
               <TabsTrigger value="orders">Orders</TabsTrigger>
               <TabsTrigger value="products">Products</TabsTrigger>
             </TabsList>
           </div>
+          {isAdmin && (
+            <TabsContent value="users">
+              <AllUsers />
+            </TabsContent>
+          )}
           <TabsContent value="tickets">
             <AllTickets />
           </TabsContent>
