@@ -54,6 +54,48 @@ export async function register(
   }
 }
 
+async function createOrder(
+  source: string,
+  parts: string,
+  eta: string,
+  freight: string
+) {
+  // Create order in database
+  try {
+    const client = await db.connect();
+    const data =
+      await client.sql`INSERT INTO orders (source, parts, eta, freight) VALUES (${source}, ${parts}, ${eta}, ${freight})`;
+  } catch (error) {
+    console.log("Error:------------------------------------->", error);
+    throw error;
+  }
+}
+
+export async function saveOrder(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    const source = formData.get("source") as string;
+    const parts = formData.get("parts") as string;
+    const eta = formData.get("eta") as string;
+    const freight = formData.get("freight") as string;
+
+    await createOrder(source, parts, eta, freight);
+    revalidatePath("/orders");
+    redirect("/orders");
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
+}
 export async function checkIfAdmin() {
   const client = await db.connect();
   const data =
