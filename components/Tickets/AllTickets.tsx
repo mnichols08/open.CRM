@@ -1,3 +1,4 @@
+// "use client";
 import {
   File,
   ListFilter,
@@ -37,12 +38,21 @@ import {
 
 import { Ticket } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
+import Link from "next/link";
+// import { handleClick } from "@/lib/actions";
 
 export default async function AllTickets() {
   const client = await db.connect();
   const data = await client.sql<Ticket>`SELECT * FROM tickets`;
   const tickets: Ticket[] = data.rows;
   client.release();
+
+  const handleClick = () => {
+    // const itemId = data.get("itemId");
+    // API call to delete an item
+    console.log("Delete clicked");
+  };
+
   return (
     <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -139,7 +149,9 @@ export default async function AllTickets() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link href="/tickets/edit">Edit</Link>
+                          </DropdownMenuItem>
                           <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
