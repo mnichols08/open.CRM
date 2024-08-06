@@ -103,6 +103,37 @@ const createTicket = async (ticket: {
   `;
 };
 
+export const editTicket = async (ticket: any, ticketID: string) => {
+  const client = await db.connect();
+  const data = await client.sql`
+    UPDATE tickets
+    SET reason="${ticket.reason}"
+    SET status="${ticket.status}"
+    SET year="${ticket.status}"
+    SET make="${ticket.make}"
+    SET model="${ticket.model}"
+    SET engine="${ticket.engine}"
+    SET submodel="${ticket.submodel}"
+    SET customer_id="${ticket.customer_id}"
+    WHERE id = ${ticketID}
+  `;
+};
+
+export async function fetchTicket(
+  prevState: string | undefined,
+  ticketID: string
+) {
+  try {
+    const client = await db.connect();
+    const data = await client.sql`
+    SELECT * FROM tickets where id = ${ticketID}
+  `;
+    return data.rows[0];
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 export async function saveTicket(
   prevState: string | undefined,
   formData: FormData
