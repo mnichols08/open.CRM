@@ -37,6 +37,7 @@ import {
 
 import { Order } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
+import Link from "next/link";
 
 export default async function AllOrders() {
   const client = await db.connect();
@@ -133,7 +134,9 @@ export default async function AllOrders() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link href={`/orders/edit/${order.id}`}>Edit</Link>
+                          </DropdownMenuItem>
                           <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
