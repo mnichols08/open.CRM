@@ -113,14 +113,14 @@ export default function Header() {
             </BreadcrumbLink>
           </BreadcrumbItem>
           {breadcrumb.map((item, index) => (
-            <>
-              <BreadcrumbSeparator key={index} />
+            <div key={index}>
+              <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <Link href={`/${item}`.toLowerCase()}>{item}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-            </>
+            </div>
           ))}
         </BreadcrumbList>
       </Breadcrumb>

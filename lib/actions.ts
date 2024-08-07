@@ -145,6 +145,63 @@ const createTicket = async (ticket: {
   `;
 };
 
+export const updateTicket = async (
+  prevState: string | undefined,
+  formData: FormData
+) => {
+  try {
+    const session: Session | null | undefined = await auth();
+    const user: User = session?.user as User;
+    const ticket = {
+      customer_id: formData.get("customer") as string,
+      reason: formData.get("reason") as string,
+      status: formData.get("status") as string,
+      year: formData.get("year") as string,
+      make: formData.get("make") as string,
+      model: formData.get("model") as string,
+      engine: formData.get("engine") as string,
+      submodel: formData.get("submodel") as string,
+      ticketID: formData.get("ticketID") as string ,
+    };
+    const { reason, status, year, make, model, engine, submodel, customer_id, ticketID } =
+      ticket;
+    const client = await db.connect();
+
+    await client.sql`
+    UPDATE tickets
+    SET reason = ${reason}, status = ${status}, year = ${year}, make = ${make}, model = ${model}, engine = ${engine}, submodel = ${submodel}, customer_id = ${customer_id}, created_by = ${user.id}
+    WHERE id = ${ticketID}
+  `;
+    revalidatePath("/tickets");
+    redirect("/tickets");
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
+};
+
+export async function fetchTicket(
+  prevState: string | undefined,
+  ticketID: string
+) {
+  try {
+    const client = await db.connect();
+    const data = await client.sql`
+    SELECT * FROM tickets where id = ${ticketID}
+  `;
+    return data.rows[0];
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 export async function saveTicket(
   prevState: string | undefined,
   formData: FormData

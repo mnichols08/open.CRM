@@ -150,7 +150,9 @@ export default async function AllTickets() {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem>
-                            <Link href="/tickets/edit">Edit</Link>
+                            <Link href={`/tickets/edit/${ticket.id}`}>
+                              Edit
+                            </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
