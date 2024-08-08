@@ -68,12 +68,12 @@ async function seedOrders() {
 
   return await client.sql`
   CREATE TABLE IF NOT EXISTS orders (
-     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     source TEXT NOT NULL,
-        parts VARCHAR(255),
-        eta VARCHAR(255),
-        freight VARCHAR(1000),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    parts VARCHAR(255),
+    eta VARCHAR(255),
+    freight VARCHAR(1000),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         
   )
   `;
