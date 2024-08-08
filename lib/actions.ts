@@ -117,8 +117,8 @@ export async function submitProduct(
   prevState: string | undefined,
   formData: FormData
 ) {
-  try{
-  const linecode = formData.get("linecode") as string;
+  try {
+    const linecode = formData.get("linecode") as string;
     const partnumber = formData.get("partnumber") as string;
     const name = formData.get("name") as string;
     const cost = formData.get("cost") as string;
@@ -128,9 +128,9 @@ export async function submitProduct(
     const description = formData.get("description") as string;
     const productID = formData.get("id") as string;
 
-  const client = await db.connect();
-  const data =
-    await client.sql`INSERT INTO products (linecode, partnumber, name, cost, quoted_price, extra_cost, source, description) VALUES (${linecode}, ${partnumber}, ${name}, ${cost}, ${quotedPrice}, ${extraCost}, ${source}, ${description})`;
+    const client = await db.connect();
+    const data =
+      await client.sql`INSERT INTO products (linecode, partnumber, name, cost, quoted_price, extra_cost, source, description) VALUES (${linecode}, ${partnumber}, ${name}, ${cost}, ${quotedPrice}, ${extraCost}, ${source}, ${description})`;
     revalidatePath("/products");
     redirect("/products");
   } catch (error) {
@@ -144,8 +144,8 @@ export async function submitProduct(
     }
     throw error;
   }
-
 }
+
 export async function updateProduct(
   prevState: string | undefined,
   formData: FormData
@@ -161,7 +161,9 @@ export async function updateProduct(
     const description = formData.get("description") as string;
     const productID = formData.get("id") as string;
     const client = await db.connect();
-    console.log(`Update products set linecode = ${lineCode}, partnumber = ${partNumber}, name = ${name}, cost = ${cost}, quoted_price = ${quotedPrice}, extra_cost = ${extraCost}, source = ${source}, description = ${description} where id = ${productID}`)
+    console.log(
+      `Update products set linecode = ${lineCode}, partnumber = ${partNumber}, name = ${name}, cost = ${cost}, quoted_price = ${quotedPrice}, extra_cost = ${extraCost}, source = ${source}, description = ${description} where id = ${productID}`
+    );
     await client.sql`Update products set linecode = ${lineCode}, partnumber = ${partNumber}, name = ${name}, cost = ${cost}, quoted_price = ${quotedPrice}, extra_cost = ${extraCost}, source = ${source}, description = ${description} where id = ${productID}`;
     revalidatePath("/products");
     redirect("/products");
@@ -255,6 +257,11 @@ const createTicket = async (ticket: {
      )
       ON CONFLICT (id) DO NOTHING;
   `;
+  client.release();
+  const ticketIDs =
+    await client.sql`select id from tickets where reason = ${ticket.reason} and status = ${ticket.status} and year = ${ticket.year} and make = ${ticket.make} and model = ${ticket.model} and engine = ${ticket.engine} and submodel = ${ticket.submodel} and created_by = ${user.id} and customer_id = ${ticket.customer_id}`;
+  const ticketID = ticketIDs.rows[0];
+  return ticketID;
 };
 
 export const updateTicket = async (
@@ -308,6 +315,19 @@ export const updateTicket = async (
   }
 };
 
+export async function createNote(
+  ticketID: string,
+  userID: string,
+  note: string
+) {
+  const client = await db.connect();
+  const data =
+    await client.sql`INSERT into notes (ticket_id, user_id, note) VALUES (${ticketID}, ${userID}, ${note})`;
+  const notes = data.rows;
+  client.release();
+  return notes;
+}
+
 export async function fetchTicket(
   prevState: string | undefined,
   ticketID: string
@@ -317,7 +337,9 @@ export async function fetchTicket(
     const data = await client.sql`
     SELECT * FROM tickets where id = ${ticketID}
   `;
-    return data.rows[0];
+    const notes = await client.sql`SELECT * FROM notes where ticket_id = ${ticketID}`;
+    client.release();
+    return {ticket: data.rows[0], notes: notes.rows};
   } catch (err) {
     console.error(err);
   }
@@ -328,6 +350,8 @@ export async function saveTicket(
   formData: FormData
 ) {
   try {
+    const session: Session | null | undefined = await auth();
+    const user: User = session?.user as User;
     const ticket = {
       customer_id: formData.get("customer") as string,
       reason: formData.get("reason") as string,
@@ -339,7 +363,9 @@ export async function saveTicket(
       submodel: formData.get("submodel") as string,
       created_by: formData.get("created_by") as string,
     };
-    await createTicket(ticket);
+    const notes = formData.getAll("notes") as string[];
+    const createdTicket = await createTicket(ticket);
+    notes.forEach((note) => createNote(createdTicket.id, user.id, note)); 
     revalidatePath("/tickets");
     redirect("/tickets");
   } catch (error) {
