@@ -26,8 +26,7 @@ export default function EditOrderPage({ params }: { params: { id: string } }) {
   }, []);
 
   return (
-    <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
-      <form action={dispatch}>
+      <form action={dispatch} className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
         <input type="hidden" name="id" value={params.id} />
         <div className="w-full max-w-4xl">
           <Card x-chunk="dashboard-07-chunk-0">
@@ -100,6 +99,5 @@ export default function EditOrderPage({ params }: { params: { id: string } }) {
           </div>
         </div>
       </form>
-    </main>
   );
 }

@@ -1,3 +1,4 @@
+"use client";
 import { PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,10 +11,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useFormState } from "react-dom";
+import {submitProduct} from '@/lib/actions';
 
-export default function CreateCustomerPage() {
+export default function CreateProductPage() {
+  const [errorMessage, dispatch] = useFormState(submitProduct, undefined);
   return (
-    <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
+    // <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
+      <form action={dispatch}>
       <div className="w-full max-w-4xl">
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>
@@ -31,6 +36,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Line Code of the product"
+                  name="linecode"
                 />
               </div>
               <div className="grid gap-3">
@@ -41,6 +47,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Part Number of the product"
+                  name="partnumber"
                 />
               </div>
               <div className="grid gap-3">
@@ -51,6 +58,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Name of the product"
+                  name="name"
                 />
               </div>
               <div className="grid gap-3">
@@ -61,6 +69,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Cost of the product"
+                  name="cost"
                 />
               </div>
               <div className="grid gap-3">
@@ -71,6 +80,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Quoted Price of the product"
+                  name="quoted_price"
                 />
               </div>
               <div className="grid gap-3">
@@ -81,6 +91,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Extra Cost of the product"
+                  name="extra_cost"
                 />
               </div>
               <div className="grid gap-3">
@@ -91,6 +102,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Source of the product"
+                  name="source"
                 />
               </div>
               <div className="grid gap-3">
@@ -101,6 +113,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Description of the product"
+                  name="description"
                 />
               </div>
             </div>
@@ -108,12 +121,13 @@ export default function CreateCustomerPage() {
         </Card>
 
         <div className="flex items-center justify-center gap-2 mt-4">
-          <Button variant="outline" size="sm">
+          <Button type="button" variant="outline" size="sm">
             Discard
           </Button>
           <Button size="sm">Create Product</Button>
         </div>
       </div>
-    </main>
+      </form>
+    // </main>
   );
 }

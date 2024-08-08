@@ -105,6 +105,79 @@ export async function fetchOrder(orderId: string) {
   return orders;
 }
 
+export async function fetchProduct(productId: string) {
+  const client = await db.connect();
+  const data = await client.sql`SELECT * FROM products where id = ${productId}`;
+  const products = data.rows;
+  client.release();
+  return products;
+}
+
+export async function submitProduct(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try{
+  const linecode = formData.get("linecode") as string;
+    const partnumber = formData.get("partnumber") as string;
+    const name = formData.get("name") as string;
+    const cost = formData.get("cost") as string;
+    const quotedPrice = formData.get("quoted_price") as string;
+    const extraCost = formData.get("extra_cost") as string;
+    const source = formData.get("source") as string;
+    const description = formData.get("description") as string;
+    const productID = formData.get("id") as string;
+
+  const client = await db.connect();
+  const data =
+    await client.sql`INSERT INTO products (linecode, partnumber, name, cost, quoted_price, extra_cost, source, description) VALUES (${linecode}, ${partnumber}, ${name}, ${cost}, ${quotedPrice}, ${extraCost}, ${source}, ${description})`;
+    revalidatePath("/products");
+    redirect("/products");
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
+
+}
+export async function updateProduct(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    const lineCode = formData.get("linecode") as string;
+    const partNumber = formData.get("partnumber") as string;
+    const name = formData.get("name") as string;
+    const cost = formData.get("cost") as string;
+    const quotedPrice = formData.get("quoted_price") as string;
+    const extraCost = formData.get("extra_cost") as string;
+    const source = formData.get("source") as string;
+    const description = formData.get("description") as string;
+    const productID = formData.get("id") as string;
+    const client = await db.connect();
+    console.log(`Update products set linecode = ${lineCode}, partnumber = ${partNumber}, name = ${name}, cost = ${cost}, quoted_price = ${quotedPrice}, extra_cost = ${extraCost}, source = ${source}, description = ${description} where id = ${productID}`)
+    await client.sql`Update products set linecode = ${lineCode}, partnumber = ${partNumber}, name = ${name}, cost = ${cost}, quoted_price = ${quotedPrice}, extra_cost = ${extraCost}, source = ${source}, description = ${description} where id = ${productID}`;
+    revalidatePath("/products");
+    redirect("/products");
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
+}
+
 export async function updateOrder(
   prevState: string | undefined,
   formData: FormData
@@ -115,7 +188,7 @@ export async function updateOrder(
     const eta = formData.get("eta") as string;
     const freight = formData.get("freight") as string;
     const orderID = formData.get("id") as string;
-    console.log(formData)
+    console.log(formData);
     const client = await db.connect();
     const data =
       await client.sql`Update orders set source = ${source}, parts = ${parts}, eta = ${eta}, freight = ${freight} where id = ${orderID}`;
@@ -200,10 +273,19 @@ export const updateTicket = async (
       model: formData.get("model") as string,
       engine: formData.get("engine") as string,
       submodel: formData.get("submodel") as string,
-      ticketID: formData.get("ticketID") as string ,
+      ticketID: formData.get("ticketID") as string,
     };
-    const { reason, status, year, make, model, engine, submodel, customer_id, ticketID } =
-      ticket;
+    const {
+      reason,
+      status,
+      year,
+      make,
+      model,
+      engine,
+      submodel,
+      customer_id,
+      ticketID,
+    } = ticket;
     const client = await db.connect();
 
     await client.sql`
