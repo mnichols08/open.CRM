@@ -17,7 +17,7 @@ import { updateProduct, fetchProduct } from "@/lib/actions";
 
 export default function CreateCustomerPage({ params }: { params: { id: string } }) {
   const [errorMessage, dispatch] = useFormState(updateProduct, undefined);
-  const [product, setProduct] = useState<Product>();
+  const [product, setProduct] = useState<Product>();  
   useEffect(() => {
     fetchProduct(params.id).then((productArr: any) => {
       setProduct(productArr[0]);

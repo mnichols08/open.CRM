@@ -117,8 +117,9 @@ export async function submitProduct(
   prevState: string | undefined,
   formData: FormData
 ) {
-  const lineCode = formData.get("linecode") as string;
-    const partNumber = formData.get("partnumber") as string;
+  try{
+  const linecode = formData.get("linecode") as string;
+    const partnumber = formData.get("partnumber") as string;
     const name = formData.get("name") as string;
     const cost = formData.get("cost") as string;
     const quotedPrice = formData.get("quoted_price") as string;
@@ -126,12 +127,25 @@ export async function submitProduct(
     const source = formData.get("source") as string;
     const description = formData.get("description") as string;
     const productID = formData.get("id") as string;
-    
+
   const client = await db.connect();
   const data =
-    await client.sql`INSERT INTO products (linecode, partnumber, name, cost, quoted_price, extra_cost, source, description) VALUES (${linecode}, ${partnumber}, ${name}, ${cost}, ${quoted_price}, ${extra_cost}, ${source}, ${description})`;
-}
+    await client.sql`INSERT INTO products (linecode, partnumber, name, cost, quoted_price, extra_cost, source, description) VALUES (${linecode}, ${partnumber}, ${name}, ${cost}, ${quotedPrice}, ${extraCost}, ${source}, ${description})`;
+    revalidatePath("/products");
+    redirect("/products");
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
 
+}
 export async function updateProduct(
   prevState: string | undefined,
   formData: FormData

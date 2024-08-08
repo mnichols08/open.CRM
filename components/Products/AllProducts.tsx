@@ -122,7 +122,7 @@ export default async function AllProducts() {
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.linecode}</TableCell>
                     <TableCell>{product.partnumber}</TableCell>
-                    <TableCell>{product.description}</TableCell>
+                    <TableCell>{product.description?.slice(0,145) + '...'}</TableCell>
                     <TableCell>{product.cost}</TableCell>
                     <TableCell>{product.extra_cost}</TableCell>
                     <TableCell>{product.quoted_price}</TableCell>
