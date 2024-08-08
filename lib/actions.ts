@@ -114,10 +114,11 @@ export async function updateOrder(
     const parts = formData.get("parts") as string;
     const eta = formData.get("eta") as string;
     const freight = formData.get("freight") as string;
-
+    const orderID = formData.get("id") as string;
+    console.log(formData)
     const client = await db.connect();
     const data =
-      await client.sql`Update orders set source = ${source}, parts = ${parts}, eta = ${eta}, freight = ${freight})`;
+      await client.sql`Update orders set source = ${source}, parts = ${parts}, eta = ${eta}, freight = ${freight} where id = ${orderID}`;
     console.log(data);
     revalidatePath("/orders");
     redirect("/orders");

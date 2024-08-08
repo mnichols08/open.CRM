@@ -21,13 +21,14 @@ export default function EditOrderPage({ params }: { params: { id: string } }) {
   const [order, setOrder] = useState<Order>();
   useEffect(() => {
     const order = fetchOrder(params.id).then((order: any) => {
-      setOrder(order);
+      setOrder(order[0]);
     });
   }, []);
 
   return (
     <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
       <form action={dispatch}>
+        <input type="hidden" name="id" value={params.id} />
         <div className="w-full max-w-4xl">
           <Card x-chunk="dashboard-07-chunk-0">
             <CardHeader>
@@ -45,6 +46,7 @@ export default function EditOrderPage({ params }: { params: { id: string } }) {
                     className="w-full"
                     defaultValue={order?.source || ""}
                     placeholder="Source of the order"
+                    name="source"
                   />
                 </div>
                 <div className="grid gap-3">
@@ -54,6 +56,7 @@ export default function EditOrderPage({ params }: { params: { id: string } }) {
                     id="parts"
                     placeholder="Parts of the order"
                     defaultValue={order?.parts || ""}
+                    name="parts"
                   />
                 </div>
                 <div className="grid gap-3">
@@ -63,6 +66,7 @@ export default function EditOrderPage({ params }: { params: { id: string } }) {
                     id="eta"
                     placeholder="Estimated Time of Arrival"
                     defaultValue={order?.eta || ""}
+                    name="eta"
                   />
                 </div>
                 <div className="grid gap-3">
@@ -72,6 +76,7 @@ export default function EditOrderPage({ params }: { params: { id: string } }) {
                     id="freight"
                     placeholder="Freight of the order"
                     defaultValue={order?.freight || ""}
+                    name="freight"
                   />
                 </div>
               </div>
@@ -79,10 +84,19 @@ export default function EditOrderPage({ params }: { params: { id: string } }) {
           </Card>
 
           <div className="flex items-center justify-center gap-2 mt-4">
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                history.back();
+              }}
+            >
               Discard
             </Button>
-            <Button size="sm">Update Order</Button>
+            <Button size="sm" type="submit">
+              Update Order
+            </Button>
           </div>
         </div>
       </form>
