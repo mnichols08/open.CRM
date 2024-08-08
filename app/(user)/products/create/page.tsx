@@ -10,10 +10,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useFormState } from "react-dom";
+import {submitProduct} from '@/lib/actions';
 
-export default function CreateCustomerPage() {
+export default function CreateProductPage() {
+  const [errorMessage, dispatch] = useFormState(submitProduct, undefined);
   return (
     <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
+      <form action={dispatch}>
       <div className="w-full max-w-4xl">
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>
@@ -31,6 +35,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Line Code of the product"
+                  name="linecode"
                 />
               </div>
               <div className="grid gap-3">
@@ -41,6 +46,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Part Number of the product"
+                  name="partnumber"
                 />
               </div>
               <div className="grid gap-3">
@@ -61,6 +67,7 @@ export default function CreateCustomerPage() {
                   className="w-full"
                   defaultValue=""
                   placeholder="Cost of the product"
+                  name="cost"
                 />
               </div>
               <div className="grid gap-3">
@@ -114,6 +121,7 @@ export default function CreateCustomerPage() {
           <Button size="sm">Create Product</Button>
         </div>
       </div>
+      </form>
     </main>
   );
 }

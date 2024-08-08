@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   File,
   ListFilter,
@@ -127,7 +128,9 @@ export default async function AllProducts() {
                     <TableCell>{product.quoted_price}</TableCell>
                     <TableCell>{product.source}</TableCell>
                     <TableCell>{product.order_id}</TableCell>
-                    <TableCell>{product.created_at}</TableCell>
+                    <TableCell>
+                      {product.created_at?.toString() || null}
+                    </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -142,7 +145,10 @@ export default async function AllProducts() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            {" "}
+                            <Link href={`/products/edit/${product.id}`}>Edit</Link>
+                          </DropdownMenuItem>
                           <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

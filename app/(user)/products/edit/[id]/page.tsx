@@ -1,4 +1,5 @@
-import { PlusCircle } from "lucide-react";
+"use client";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,10 +11,21 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useFormState } from "react-dom";
+import { Product } from "@/lib/definitions";
+import { updateProduct, fetchProduct } from "@/lib/actions";
 
-export default function CreateCustomerPage() {
+export default function CreateCustomerPage({ params }: { params: { id: string } }) {
+  const [errorMessage, dispatch] = useFormState(updateProduct, undefined);
+  const [product, setProduct] = useState<Product>();
+  useEffect(() => {
+    fetchProduct(params.id).then((productArr: any) => {
+      setProduct(productArr[0]);
+    });
+  }, []);
   return (
-    <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
+    <form action={dispatch} className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
+      <input type="hidden" name="id" value={params.id} />
       <div className="w-full max-w-4xl">
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>
@@ -29,7 +41,8 @@ export default function CreateCustomerPage() {
                   id="linecode"
                   type="text"
                   className="w-full"
-                  defaultValue=""
+                  defaultValue={product?.linecode || ""}
+                  name="linecode"
                   placeholder="Line Code of the product"
                 />
               </div>
@@ -39,7 +52,8 @@ export default function CreateCustomerPage() {
                   id="partnumber"
                   type="text"
                   className="w-full"
-                  defaultValue=""
+                  defaultValue={product?.partnumber || ""}
+                  name="partnumber"
                   placeholder="Part Number of the product"
                 />
               </div>
@@ -49,7 +63,8 @@ export default function CreateCustomerPage() {
                   id="name"
                   type="text"
                   className="w-full"
-                  defaultValue=""
+                  defaultValue={product?.name || ""}
+                  name="name"
                   placeholder="Name of the product"
                 />
               </div>
@@ -59,7 +74,8 @@ export default function CreateCustomerPage() {
                   id="cost"
                   type="text"
                   className="w-full"
-                  defaultValue=""
+                  defaultValue={product?.cost || ""}
+                  name="cost"
                   placeholder="Cost of the product"
                 />
               </div>
@@ -69,7 +85,8 @@ export default function CreateCustomerPage() {
                   id="quoted_price"
                   type="text"
                   className="w-full"
-                  defaultValue=""
+                  defaultValue={product?.quoted_price || ""}
+                  name="quoted_price"
                   placeholder="Quoted Price of the product"
                 />
               </div>
@@ -79,7 +96,8 @@ export default function CreateCustomerPage() {
                   id="extra_cost"
                   type="text"
                   className="w-full"
-                  defaultValue=""
+                  defaultValue={product?.extra_cost || ""}
+                  name="extra_cost"
                   placeholder="Extra Cost of the product"
                 />
               </div>
@@ -89,7 +107,8 @@ export default function CreateCustomerPage() {
                   id="source"
                   type="text"
                   className="w-full"
-                  defaultValue=""
+                  defaultValue={product?.source || ""}
+                  name="source"
                   placeholder="Source of the product"
                 />
               </div>
@@ -99,7 +118,8 @@ export default function CreateCustomerPage() {
                   id="description"
                   type="text"
                   className="w-full"
-                  defaultValue=""
+                  defaultValue={product?.description || ""}
+                  name="description"
                   placeholder="Description of the product"
                 />
               </div>
@@ -114,6 +134,6 @@ export default function CreateCustomerPage() {
           <Button size="sm">Update Product</Button>
         </div>
       </div>
-    </main>
+    </form>
   );
 }
