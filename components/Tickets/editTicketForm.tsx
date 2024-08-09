@@ -38,14 +38,13 @@ export default function EditTicketPage(
   const ticketID = props.ticketID;
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [customer, setCustomer] = useState([]);
-  const [notes, setNotes] = useState<string>[]>([]);
+
+  const [notes, setNotes] = useState<Note[]>([]);
 
   const addNote = (newNote: string) => {
-    const updated_notes = notes;
-    updated_notes.push(newNote); 
-    setNotes(updated_notes);
+    setNotes([...notes, {id: "", ticket_id: "", user_id: "", note: newNote, created_at: Date.now().toString()}]);
   };
-
+  
   useEffect(() => {
     fetchTicket(undefined, ticketID)
       .then((fetchedTicket: any) => {
@@ -161,7 +160,7 @@ export default function EditTicketPage(
                 <CardTitle>Ticket Notes</CardTitle>
               </CardHeader>
               {notes?.map((note, index) => (
-                  <NoteCard key={index} note={note} />
+                  <NoteCard key={index} note={note}  />
                 ))}
               <CardFooter className="justify-center border-t p-4">
               <AddNoteButton onClick={addNote} />

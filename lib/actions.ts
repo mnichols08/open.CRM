@@ -282,6 +282,9 @@ export const updateTicket = async (
       submodel: formData.get("submodel") as string,
       ticketID: formData.get("ticketID") as string,
     };
+    const notes = formData.getAll("notes") as string[];
+    const noteIDs = formData.getAll("note_id") as string[];
+
     const {
       reason,
       status,
@@ -300,6 +303,16 @@ export const updateTicket = async (
     SET reason = ${reason}, status = ${status}, year = ${year}, make = ${make}, model = ${model}, engine = ${engine}, submodel = ${submodel}, customer_id = ${customer_id}, created_by = ${user.id}
     WHERE id = ${ticketID}
   `;
+    notes.forEach((note, i) => {
+      if (noteIDs[i]) {
+        updateNote({
+          noteID: noteIDs[i],
+          note,
+        });
+      } else {
+        createNote(ticketID, user.id, note);
+      }
+    });
     revalidatePath("/tickets");
     redirect("/tickets");
   } catch (error) {
@@ -327,6 +340,21 @@ export async function createNote(
   client.release();
   return notes;
 }
+
+export async function updateNote({
+  noteID,
+  note,
+}: {
+  noteID: string;
+  note: string;
+}) {
+  const client = await db.connect();
+  const data =
+    await client.sql`UPDATE notes SET note = ${note} WHERE id = ${noteID}`;
+  const notes = data.rows;
+  client.release();
+  return notes;
+};
 
 export async function fetchTicket(
   prevState: string | undefined,
