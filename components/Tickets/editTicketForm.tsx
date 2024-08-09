@@ -19,11 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { Textarea } from "@/components/ui/textarea";
-import { Ticket } from "@/lib/definitions";
+import { Ticket, Note } from "@/lib/definitions";
 import { updateTicket, fetchTicket } from "@/lib/actions";
 import { useFormState } from "react-dom";
+import NoteCard from "./NoteCard";
+import { AddNoteButton } from "./AddNoteButton";
 
 export default function EditTicketPage(
   props: any
@@ -38,14 +38,19 @@ export default function EditTicketPage(
   const ticketID = props.ticketID;
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [customer, setCustomer] = useState([]);
-  const [notes, setNotes] = useState<string[]>([]); // Initialize notes as an array of strings
 
+  const [notes, setNotes] = useState<Note[]>([]);
+
+  const addNote = (newNote: string) => {
+    setNotes([...notes, {id: "", ticket_id: "", user_id: "", note: newNote, created_at: Date.now().toString()}]);
+  };
+  
   useEffect(() => {
     fetchTicket(undefined, ticketID)
       .then((fetchedTicket: any) => {
-        setTicket(fetchedTicket);
-        setNotes(fetchedTicket.notes || []);
-        setCustomer(fetchedTicket.customer_id || []);
+        setTicket(fetchedTicket.ticket);
+        setNotes(fetchedTicket.notes || []); 
+        setCustomer(fetchedTicket.ticket.customer_id || []);
       })
       .catch((error) => {
         console.error("Error fetching ticket:", error);
@@ -84,6 +89,7 @@ export default function EditTicketPage(
                       name="reason"
                       defaultValue={ticket?.reason || ""}
                       placeholder="Give a general reason for opening this ticket"
+                      required
                     />
                   </div>
                 </div>
@@ -153,20 +159,11 @@ export default function EditTicketPage(
               <CardHeader>
                 <CardTitle>Ticket Notes</CardTitle>
               </CardHeader>
-              <CardContent>
-                <Textarea
-                  id="description"
-                  defaultValue=""
-                  placeholder="Add any notes about this ticket"
-                  name="description"
-                  className="min-h-32"
-                />
-              </CardContent>
+              {notes?.map((note, index) => (
+                  <NoteCard key={index} note={note}  />
+                ))}
               <CardFooter className="justify-center border-t p-4">
-                <Button size="sm" variant="ghost" className="gap-1">
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  Add Note
-                </Button>
+              <AddNoteButton onClick={addNote} />
               </CardFooter>
             </Card>
           </div>
@@ -179,24 +176,23 @@ export default function EditTicketPage(
                 <div className="grid gap-6">
                   <div className="grid gap-3">
                     <Label htmlFor="status">Status</Label>
-                    <Select name="status" defaultValue="open" >
+                    <Select name="status" defaultValue="open">
                       <SelectTrigger id="status" aria-label="Select status">
                         <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="open">In Progress</SelectItem>
-                          <SelectItem value="helpWanted">
-                            Action Needed
-                          </SelectItem>
-                          <SelectItem value="closed">Archived</SelectItem>
-                        </SelectContent>
-                      
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="open">In Progress</SelectItem>
+                        <SelectItem value="helpWanted">
+                          Action Needed
+                        </SelectItem>
+                        <SelectItem value="closed">Archived</SelectItem>
+                      </SelectContent>
                     </Select>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
+            {/* <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
               <CardHeader>
                 <CardTitle>Useful Links</CardTitle>
                 <CardDescription>
@@ -220,7 +216,7 @@ export default function EditTicketPage(
                   </Button>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
             <Card x-chunk="dashboard-07-chunk-5">
               <CardHeader>
                 <CardTitle>Archive Ticket</CardTitle>

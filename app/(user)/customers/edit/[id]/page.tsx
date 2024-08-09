@@ -1,4 +1,5 @@
-import { PlusCircle } from "lucide-react";
+"use client";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,10 +11,31 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useFormState } from "react-dom";
+import { Customer } from "@/lib/definitions";
+import { updateCustomer, fetchCustomer } from "@/lib/actions";
 
-export default function EditCustomerPage(formData: any) {
+export default function EditCustomerPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+
+    const [errorMessage, dispatch] = useFormState(updateCustomer, undefined);
+    const [customer, setCustomer] = useState<Customer>();  
+
+  useEffect(() => {
+    console.log(params.id);
+    fetchCustomer(params.id).then((customerReponse: any) => {
+      setCustomer(customerReponse);
+    });
+  }, []);
   return (
-    <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
+    <form
+      action={dispatch}
+      className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8"
+    >
+      <input type="hidden" name="id" value={params.id} />
       <div className="w-full max-w-4xl">
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>
@@ -31,8 +53,9 @@ export default function EditCustomerPage(formData: any) {
                   id="name"
                   type="text"
                   className="w-full"
-                  defaultValue=""
-                  placeholder="Give a general reason for opening this ticket"
+                  defaultValue={customer?.name || ""}
+                  placeholder="Provide a Customer Name"
+                  name="name"
                 />
               </div>
               <div className="grid gap-3">
@@ -41,6 +64,8 @@ export default function EditCustomerPage(formData: any) {
                   type="text"
                   id="address1"
                   placeholder="Enter 1st Address line"
+                  defaultValue={customer?.address1 || ""}
+                  name="address1"
                 />
               </div>
               <div className="grid gap-3">
@@ -49,6 +74,8 @@ export default function EditCustomerPage(formData: any) {
                   type="text"
                   id="address2"
                   placeholder="Enter 2nd Address line"
+                  defaultValue={customer?.address2 || ""}
+                  name="address2"
                 />
               </div>
               <div className="grid gap-3">
@@ -57,6 +84,8 @@ export default function EditCustomerPage(formData: any) {
                   type="text"
                   id="city"
                   placeholder="Enter a Customer City"
+                  defaultValue={customer?.city || ""}
+                  name="city"
                 />
               </div>
               <div className="grid gap-3">
@@ -65,6 +94,8 @@ export default function EditCustomerPage(formData: any) {
                   type="text"
                   id="state"
                   placeholder="Enter a Customer State"
+                  defaultValue={customer?.state || ""}
+                  name="state"
                 />
               </div>
               <div className="grid gap-3">
@@ -72,7 +103,9 @@ export default function EditCustomerPage(formData: any) {
                 <Input
                   type="text"
                   id="zip"
-                  placeholder="Enter a Customer Zip"
+                  placeholder="Enter a Customer Zip Code"
+                  defaultValue={customer?.zip || ""}
+                  name="zip"
                 />
               </div>
               <div className="grid gap-3">
@@ -81,6 +114,8 @@ export default function EditCustomerPage(formData: any) {
                   type="text"
                   id="country"
                   placeholder="Enter a Customer Country"
+                  defaultValue={customer?.country || ""}
+                  name="country"
                 />
               </div>
               <div className="grid gap-3">
@@ -89,6 +124,8 @@ export default function EditCustomerPage(formData: any) {
                   type="text"
                   id="phone"
                   placeholder="Enter a Customer Phone"
+                  defaultValue={customer?.phone || ""}
+                  name="phone"
                 />
               </div>
             </div>
@@ -102,6 +139,6 @@ export default function EditCustomerPage(formData: any) {
           <Button size="sm">Update Customer</Button>
         </div>
       </div>
-    </main>
+    </form>
   );
 }

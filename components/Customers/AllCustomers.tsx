@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   File,
   ListFilter,
@@ -140,7 +141,9 @@ export default async function AllCustomers() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link href={`/customers/edit/${customer.id}`}>Edit</Link>
+                          </DropdownMenuItem>
                           <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

@@ -17,7 +17,7 @@ export default async function CustomerDropDown({
   const customers = customerQuery.rows;
   client.release();
   return (
-    <Select name="customer" defaultValue={selectedCustomer}>
+    <Select name="customer" defaultValue={selectedCustomer} required>
       <SelectTrigger id="customer" aria-label="Select Customer">
         <SelectValue placeholder="Select Customer" />
       </SelectTrigger>

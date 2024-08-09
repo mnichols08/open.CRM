@@ -25,6 +25,14 @@ export interface Session {
   expires: string;
 }
 
+export interface Note {
+  id: string;
+  ticket_id: string;
+  user_id: string;
+  note: string;
+  created_at: string;
+}
+
 export type Customer = {
   id: string | null;
   name: string | null;
