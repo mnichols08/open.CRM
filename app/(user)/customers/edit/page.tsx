@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 
 export default function EditCustomerPage(formData: any) {
   return (
-    <main className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
+    <form className="flex items-center justify-center p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="w-full max-w-4xl">
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>
