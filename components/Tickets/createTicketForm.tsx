@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { saveTicket } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import { AddNoteButton } from "./AddNoteButton";
+import { Note } from "@/lib/definitions";
 
 export default function CreateTicketPage({
   children,
@@ -31,16 +32,11 @@ export default function CreateTicketPage({
   children: React.ReactNode;
 }) {
   const [errorMessage, dispatch] = useFormState(saveTicket, undefined);
-  const [notes, setNotes] = useState<string[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
 
-  const addNote = (newNote: string) => {
+  const addNote = (newNote: Note) => {
     setNotes([...notes, newNote]);
   };
-
-  // const addNoteButtonFn = (e) => {
-  //   e.preventDefault();
-  //   addNote();
-  // };
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -146,71 +142,6 @@ export default function CreateTicketPage({
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
               <input type="hidden" name="status" value="open" />
-              {/* <Card x-chunk="dashboard-07-chunk-3">
-                <CardHeader>
-                  <CardTitle>Ticket Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-6">
-                    <div className="grid gap-3">
-                      <Label htmlFor="status">Status</Label>
-                      <Select name="status">
-                        <SelectTrigger id="status" aria-label="Select status">
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="open">In Progress</SelectItem>
-                          <SelectItem value="helpWanted">
-                            Action Needed
-                          </SelectItem>
-                          <SelectItem value="closed">Archived</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card> */}
-              {/* <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
-                <CardHeader>
-                  <CardTitle>Useful Links</CardTitle>
-                  <CardDescription>
-                    Did you find any useful articles or resources related to
-                    this? Please add them here.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-2">
-                    <div className="grid gap-3">
-                      <Label htmlFor="link">Link</Label>
-                      <Input
-                        id="link"
-                        type="url"
-                        placeholder="https://example.com"
-                        name="link"
-                      />
-                    </div>
-                    <Button size="sm" variant="secondary">
-                      Add Link
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card> */}
-              {/* <Card x-chunk="dashboard-07-chunk-5">
-                <CardHeader>
-                  <CardTitle>Archive Ticket</CardTitle>
-                  <CardDescription>
-                    If this ticket is no longer needed, you can archive it.
-                    Don&apos;t worry it will won&apos;t be deleted and you can
-                    always access it later.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div></div>
-                  <Button size="sm" variant="secondary">
-                    Archive Ticket
-                  </Button>
-                </CardContent>
-              </Card> */}
             </div>
           </div>
           <div className="flex items-center justify-center gap-2">
