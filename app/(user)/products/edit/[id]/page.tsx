@@ -15,7 +15,7 @@ import { useFormState } from "react-dom";
 import { Product } from "@/lib/definitions";
 import { updateProduct, fetchProduct } from "@/lib/actions";
 
-export default function CreateCustomerPage({ params }: { params: { id: string } }) {
+export default function EditCustomerPage({ params }: { params: { id: string } }) {
   const [errorMessage, dispatch] = useFormState(updateProduct, undefined);
   const [product, setProduct] = useState<Product>();  
   useEffect(() => {

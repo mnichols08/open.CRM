@@ -126,11 +126,9 @@ export async function submitProduct(
     const extraCost = formData.get("extra_cost") as string;
     const source = formData.get("source") as string;
     const description = formData.get("description") as string;
-    const productID = formData.get("id") as string;
-
     const client = await db.connect();
-    const data =
-      await client.sql`INSERT INTO products (linecode, partnumber, name, cost, quoted_price, extra_cost, source, description) VALUES (${linecode}, ${partnumber}, ${name}, ${cost}, ${quotedPrice}, ${extraCost}, ${source}, ${description})`;
+    await client.sql`INSERT INTO products (linecode, partnumber, name, cost, quoted_price, extra_cost, source, description) VALUES (${linecode}, ${partnumber}, ${name}, ${cost}, ${quotedPrice}, ${extraCost}, ${source}, ${description})`;
+    client.release();
     revalidatePath("/products");
     redirect("/products");
   } catch (error) {
@@ -161,10 +159,8 @@ export async function updateProduct(
     const description = formData.get("description") as string;
     const productID = formData.get("id") as string;
     const client = await db.connect();
-    console.log(
-      `Update products set linecode = ${lineCode}, partnumber = ${partNumber}, name = ${name}, cost = ${cost}, quoted_price = ${quotedPrice}, extra_cost = ${extraCost}, source = ${source}, description = ${description} where id = ${productID}`
-    );
     await client.sql`Update products set linecode = ${lineCode}, partnumber = ${partNumber}, name = ${name}, cost = ${cost}, quoted_price = ${quotedPrice}, extra_cost = ${extraCost}, source = ${source}, description = ${description} where id = ${productID}`;
+    client.release();
     revalidatePath("/products");
     redirect("/products");
   } catch (error) {
@@ -354,7 +350,89 @@ export async function updateNote({
   const notes = data.rows;
   client.release();
   return notes;
-};
+}
+
+export async function fetchCustomer(id: string) {
+  const client = await db.connect();
+  const data = await client.sql`SELECT * FROM customers where id = ${id}`;
+  const customer = data.rows[0];
+  client.release();
+  return customer;
+}
+
+export async function createCustomer(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    const customerObj = {
+      id: formData.get("id") as string,
+      name: formData.get("name") as string,
+      address1: formData.get("address1") as string,
+      address2: formData.get("address2") as string,
+      city: formData.get("city") as string,
+      state: formData.get("state") as string,
+      zip: formData.get("zip") as string,
+      country: formData.get("country") as string,
+      phone: formData.get("phone") as string,
+    };
+    const { name, address1, address2, city, state, zip, country, phone } =
+      customerObj;
+    const client = await db.connect();
+    const data =
+      await client.sql`INSERT into customers (name, address1, address2, city, state, zip, country, phone) VALUES (${name}, ${address1}, ${address2}, ${city}, ${state},  ${zip}, ${country}, ${phone})`;
+    revalidatePath("/customers");
+    redirect("/customers");
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
+}
+
+export async function updateCustomer(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  const customerObj = {
+    id: formData.get("id") as string,
+    name: formData.get("name") as string,
+    address1: formData.get("address1") as string,
+    address2: formData.get("address2") as string,
+    city: formData.get("city") as string,
+    state: formData.get("state") as string,
+    zip: formData.get("zip") as string,
+    country: formData.get("country") as string,
+    phone: formData.get("phone") as string,
+  };
+  try {
+    const { id, name, address1, address2, city, state, zip, country, phone } =
+      customerObj;
+    const client = await db.connect();
+    const data =
+      await client.sql`UPDATE customers SET name = ${name}, address1 = ${address1}, address2 = ${address2}, city = ${city}, state = ${state}, zip = ${zip}, country = ${country}, phone = ${phone} where id = ${id}`;
+    const customer = data.rows[0];
+    client.release();
+    revalidatePath("/customers");
+    redirect("/customers");
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
+}
 
 export async function fetchTicket(
   prevState: string | undefined,
@@ -365,9 +443,10 @@ export async function fetchTicket(
     const data = await client.sql`
     SELECT * FROM tickets where id = ${ticketID}
   `;
-    const notes = await client.sql`SELECT * FROM notes where ticket_id = ${ticketID}`;
+    const notes =
+      await client.sql`SELECT * FROM notes where ticket_id = ${ticketID}`;
     client.release();
-    return {ticket: data.rows[0], notes: notes.rows};
+    return { ticket: data.rows[0], notes: notes.rows };
   } catch (err) {
     console.error(err);
   }
@@ -393,7 +472,7 @@ export async function saveTicket(
     };
     const notes = formData.getAll("notes") as string[];
     const createdTicket = await createTicket(ticket);
-    notes.forEach((note) => createNote(createdTicket.id, user.id, note)); 
+    notes.forEach((note) => createNote(createdTicket.id, user.id, note));
     revalidatePath("/tickets");
     redirect("/tickets");
   } catch (error) {
