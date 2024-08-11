@@ -10,7 +10,7 @@ async function seedCustomers() {
   await client.sql`
         CREATE TABLE IF NOT EXISTS customers (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        seq_no VARCHAR(25),
+        seq_no CARCHAR(25),
         name VARCHAR(255),
         address1 VARCHAR(255),
         address2 VARCHAR(255),
@@ -82,7 +82,8 @@ async function seedOrders() {
 
 async function seedTickets() {
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-  await client.sql`CREATE TYPE statustype AS ENUM('open', 'helpWanted', 'closed')`;
+
+  //await client.sql`CREATE TYPE statustype AS ENUM('${open}', ${helpWanted}, ${closed})`;
 
   await client.sql`
             CREATE TABLE IF NOT EXISTS tickets (
@@ -138,12 +139,12 @@ async function seedProducts() {
 export async function GET() {
   try {
     await client.sql`BEGIN`;
-    await seedUsers();
+   // await seedUsers();
     await seedCustomers();
-    await seedTickets();
-    await seedNotes();
-    await seedProducts();
-    await seedOrders();
+    // await seedTickets();
+    // await seedNotes();
+    // await seedProducts();
+    // await seedOrders();
     await client.sql`COMMIT`;
 
     return Response.json({ message: "Database seeded successfully" });
