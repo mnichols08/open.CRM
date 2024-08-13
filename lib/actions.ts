@@ -4,7 +4,7 @@ import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@vercel/postgres";
-import type { User, Session, Ticket } from "@/lib/definitions";
+import type { User, Session, Ticket, Customer } from "@/lib/definitions";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -372,6 +372,20 @@ export async function fetchCustomer(id: string) {
   const customer = data.rows[0];
   client.release();
   return customer;
+}
+
+export async function fetchCustomers() {
+  const client = await db.connect();
+  const data = await client.sql<Customer>`SELECT * FROM customers`;
+  const customers: Customer[] = data.rows;
+  client.release();
+  return customers;
+}
+
+export async function deleteCustomer(id: string) {
+  const client = await db.connect();
+  await client.sql`DELETE FROM customers WHERE id = ${id}`;
+  client.release();
 }
 
 export async function createCustomer(
