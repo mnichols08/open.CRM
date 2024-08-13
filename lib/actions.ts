@@ -4,7 +4,7 @@ import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@vercel/postgres";
-import type { User, Session } from "@/lib/definitions";
+import type { User, Session, Ticket } from "@/lib/definitions";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -259,6 +259,20 @@ const createTicket = async (ticket: {
   const ticketID = ticketIDs.rows[0];
   return ticketID;
 };
+
+export async function fetchTickets() {
+  const client = await db.connect();
+  const data = await client.sql<Ticket>`SELECT * FROM tickets`;
+  const tickets: Ticket[] = data.rows;
+  client.release();
+  return tickets;
+}
+
+export async function deleteTicket(id: string) {
+  const client = await db.connect();
+  await client.sql`DELETE FROM tickets WHERE id = ${id}`;
+  client.release();
+}
 
 export const updateTicket = async (
   prevState: string | undefined,

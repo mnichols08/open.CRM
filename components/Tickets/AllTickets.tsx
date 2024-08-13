@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 import {
   File,
   ListFilter,
@@ -39,18 +39,29 @@ import {
 import { Ticket } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
 import Link from "next/link";
+import { deleteTicket, fetchTickets } from "@/lib/actions";
+import { useState, useEffect } from "react";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 // import { handleClick } from "@/lib/actions";
 
-export default async function AllTickets() {
-  const client = await db.connect();
-  const data = await client.sql<Ticket>`SELECT * FROM tickets`;
-  const tickets: Ticket[] = data.rows;
-  client.release();
+export default function AllTickets() {
+  const [tickets, setTickets] = useState<Ticket[]>([]);
 
-  const handleClick = () => {
-    // const itemId = data.get("itemId");
+  useEffect(() => {
+    fetchTickets().then((data) => {
+      const tickets: Ticket[] = data;
+      setTickets(tickets);
+    });
+  }, []);
+
+  const handleDelete = (id: any) => {
     // API call to delete an item
-    console.log("Delete clicked");
+    deleteTicket(id);
+    fetchTickets().then((data) => {
+      const tickets: Ticket[] = data;
+      setTickets(tickets);
+    });
   };
 
   return (
@@ -154,7 +165,11 @@ export default async function AllTickets() {
                               Edit
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(ticket.id)}
+                          >
+                            Delete
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
