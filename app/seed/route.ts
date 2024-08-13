@@ -83,7 +83,7 @@ async function seedOrders() {
 async function seedTickets() {
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
-  //await client.sql`CREATE TYPE statustype AS ENUM('${open}', ${helpWanted}, ${closed})`;
+  await client.sql`CREATE TYPE statustype AS ENUM('open', 'helpWanted', 'closed')`;
 
   await client.sql`
             CREATE TABLE IF NOT EXISTS tickets (
@@ -108,7 +108,7 @@ async function seedNotes() {
   await client.sql`
         CREATE TABLE IF NOT EXISTS notes (
             id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-            ticket_id UUID NOT NULL REFERENCES tickets(id),
+            ticket_id UUID NOT NULL REFERENCES tickets(id) on DELETE CASCADE,
             user_id UUID NOT NULL REFERENCES users(id),
             note TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -139,10 +139,10 @@ async function seedProducts() {
 export async function GET() {
   try {
     await client.sql`BEGIN`;
-   // await seedUsers();
-    await seedCustomers();
+    // await seedUsers();
+    // await seedCustomers();
     // await seedTickets();
-    // await seedNotes();
+    await seedNotes();
     // await seedProducts();
     // await seedOrders();
     await client.sql`COMMIT`;
