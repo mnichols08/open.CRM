@@ -50,13 +50,11 @@ export default function EditTicketPage(props: any) {
   };
 
   const removeNote = (id: string) => {
-    console.log("Removing note with value: ", id, notes);
-    try {
-      setNotes(notes.filter((note) => note?.id !== id));
-      console.log(Number(id));
-    } catch (e) {
+    if (isNaN(Number(id))) {
+      console.log("Deleting note with id: ", id);
       deleteNote(id);
     }
+    setNotes(notes.filter((note) => note?.id !== id));
   };
 
   const updateNote = (id: string, value: string) => {
