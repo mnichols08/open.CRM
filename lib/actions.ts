@@ -4,7 +4,14 @@ import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@vercel/postgres";
-import type { User, Session, Ticket, Customer, Order } from "@/lib/definitions";
+import type {
+  User,
+  Session,
+  Ticket,
+  Customer,
+  Order,
+  Product,
+} from "@/lib/definitions";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -125,6 +132,20 @@ export async function fetchProduct(productId: string) {
   const products = data.rows;
   client.release();
   return products;
+}
+
+export async function fetchProducts() {
+  const client = await db.connect();
+  const data = await client.sql<Product>`SELECT * FROM products`;
+  const products: Product[] = data.rows;
+  client.release();
+  return products;
+}
+
+export async function deleteProduct(productId: string) {
+  const client = await db.connect();
+  await client.sql`DELETE FROM products WHERE id = ${productId}`;
+  client.release();
 }
 
 export async function submitProduct(

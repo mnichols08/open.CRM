@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   File,
@@ -38,12 +39,27 @@ import {
 
 import { Product } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
+import { fetchProducts, deleteProduct } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
-export default async function AllProducts() {
-  const client = await db.connect();
-  const data = await client.sql<Product>`SELECT * FROM products`;
-  const products: Product[] = data.rows;
-  client.release();
+export default function AllProducts() {
+  const [products, setProducts] = useState<Product[]>([]);
+  useEffect(() => {
+    fetchProducts().then((data) => {
+      const products: Product[] = data;
+      setProducts(products);
+    });
+  }, []);
+
+  const handleDelete = (id: any) => {
+    // API call to delete an item
+    console.log("Deleting product with id: ", id);
+    deleteProduct(id);
+    fetchProducts().then((data) => {
+      const products: Product[] = data;
+      setProducts(products);
+    });
+  };
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -84,9 +100,11 @@ export default async function AllProducts() {
             </Button>
             <Button size="sm" className="h-8 gap-1">
               <PlusCircle className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Add Product
-              </span>
+              <Link href="/products/create">
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Add Product
+                </span>
+              </Link>
             </Button>
           </div>
         </div>
@@ -122,7 +140,9 @@ export default async function AllProducts() {
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.linecode}</TableCell>
                     <TableCell>{product.partnumber}</TableCell>
-                    <TableCell>{product.description?.slice(0,145) + '...'}</TableCell>
+                    <TableCell>
+                      {product.description?.slice(0, 145) + "..."}
+                    </TableCell>
                     <TableCell>{product.cost}</TableCell>
                     <TableCell>{product.extra_cost}</TableCell>
                     <TableCell>{product.quoted_price}</TableCell>
@@ -147,9 +167,15 @@ export default async function AllProducts() {
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem>
                             {" "}
-                            <Link href={`/products/edit/${product.id}`}>Edit</Link>
+                            <Link href={`/products/edit/${product.id}`}>
+                              Edit
+                            </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(product.id)}
+                          >
+                            Delete
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
