@@ -349,14 +349,23 @@ export const updateTicket = async (
     WHERE id = ${ticketID}
   `;
     notes.forEach((note, i) => {
-      if (noteIDs[i]) {
+      try {
+        console.log(Number(i));
+        createNote(ticketID, user.id, note);
+      } catch (error) {
         updateNote({
           noteID: noteIDs[i],
           note,
         });
-      } else {
-        createNote(ticketID, user.id, note);
       }
+      // if (noteIDs[i]) {
+      //   updateNote({
+      //     noteID: noteIDs[i],
+      //     note,
+      //   });
+      // } else {
+      //   createNote(ticketID, user.id, note);
+      // }
     });
     revalidatePath("/tickets");
     redirect("/tickets");
@@ -396,6 +405,14 @@ export async function updateNote({
   const client = await db.connect();
   const data =
     await client.sql`UPDATE notes SET note = ${note} WHERE id = ${noteID}`;
+  const notes = data.rows;
+  client.release();
+  return notes;
+}
+
+export async function deleteNote(id: string) {
+  const client = await db.connect();
+  const data = await client.sql`DELETE FROM notes WHERE id = ${id}`;
   const notes = data.rows;
   client.release();
   return notes;
