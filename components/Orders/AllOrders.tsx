@@ -1,3 +1,4 @@
+"use client";
 import {
   File,
   ListFilter,
@@ -38,12 +39,28 @@ import {
 import { Order } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
 import Link from "next/link";
+import { deleteOrder, fetchOrders } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
-export default async function AllOrders() {
-  const client = await db.connect();
-  const data = await client.sql<Order>`SELECT * FROM orders`;
-  const orders: Order[] = data.rows;
-  client.release();
+export default function AllOrders() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  useEffect(() => {
+    fetchOrders().then((data) => {
+      const orders: Order[] = data;
+      setOrders(orders);
+    });
+  }, []);
+
+  const handleDelete = (id: any) => {
+    // API call to delete an item
+    console.log("Deleting order with id: ", id);
+    deleteOrder(id);
+    fetchOrders().then((data) => {
+      const orders: Order[] = data;
+      setOrders(orders);
+    });
+  };
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -84,9 +101,11 @@ export default async function AllOrders() {
             </Button>
             <Button size="sm" className="h-8 gap-1">
               <PlusCircle className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Add Order
-              </span>
+              <Link href="/orders/create">
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Add Order
+                </span>
+              </Link>
             </Button>
           </div>
         </div>
@@ -137,7 +156,11 @@ export default async function AllOrders() {
                           <DropdownMenuItem>
                             <Link href={`/orders/edit/${order.id}`}>Edit</Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(order.id)}
+                          >
+                            Delete
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

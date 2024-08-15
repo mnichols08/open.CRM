@@ -4,7 +4,14 @@ import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@vercel/postgres";
-import type { User, Session, Ticket } from "@/lib/definitions";
+import type {
+  User,
+  Session,
+  Ticket,
+  Customer,
+  Order,
+  Product,
+} from "@/lib/definitions";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -105,12 +112,40 @@ export async function fetchOrder(orderId: string) {
   return orders;
 }
 
+export async function fetchOrders() {
+  const client = await db.connect();
+  const data = await client.sql<Order>`SELECT * FROM orders`;
+  const orders: Order[] = data.rows;
+  client.release();
+  return orders;
+}
+
+export async function deleteOrder(orderId: string) {
+  const client = await db.connect();
+  await client.sql`DELETE FROM orders WHERE id = ${orderId}`;
+  client.release();
+}
+
 export async function fetchProduct(productId: string) {
   const client = await db.connect();
   const data = await client.sql`SELECT * FROM products where id = ${productId}`;
   const products = data.rows;
   client.release();
   return products;
+}
+
+export async function fetchProducts() {
+  const client = await db.connect();
+  const data = await client.sql<Product>`SELECT * FROM products`;
+  const products: Product[] = data.rows;
+  client.release();
+  return products;
+}
+
+export async function deleteProduct(productId: string) {
+  const client = await db.connect();
+  await client.sql`DELETE FROM products WHERE id = ${productId}`;
+  client.release();
 }
 
 export async function submitProduct(
@@ -314,7 +349,7 @@ export const updateTicket = async (
     WHERE id = ${ticketID}
   `;
     notes.forEach((note, i) => {
-      if (noteIDs[i]) {
+      if (isNaN(Number(noteIDs[i]))) {
         updateNote({
           noteID: noteIDs[i],
           note,
@@ -366,12 +401,34 @@ export async function updateNote({
   return notes;
 }
 
+export async function deleteNote(id: string) {
+  const client = await db.connect();
+  const data = await client.sql`DELETE FROM notes WHERE id = ${id}`;
+  const notes = data.rows;
+  client.release();
+  return notes;
+}
+
 export async function fetchCustomer(id: string) {
   const client = await db.connect();
   const data = await client.sql`SELECT * FROM customers where id = ${id}`;
   const customer = data.rows[0];
   client.release();
   return customer;
+}
+
+export async function fetchCustomers() {
+  const client = await db.connect();
+  const data = await client.sql<Customer>`SELECT * FROM customers`;
+  const customers: Customer[] = data.rows;
+  client.release();
+  return customers;
+}
+
+export async function deleteCustomer(id: string) {
+  const client = await db.connect();
+  await client.sql`DELETE FROM customers WHERE id = ${id}`;
+  client.release();
 }
 
 export async function createCustomer(

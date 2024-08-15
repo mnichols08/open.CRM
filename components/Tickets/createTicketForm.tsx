@@ -33,9 +33,37 @@ export default function CreateTicketPage({
 }) {
   const [errorMessage, dispatch] = useFormState(saveTicket, undefined);
   const [notes, setNotes] = useState<Note[]>([]);
+  const [countNote, setCountNote] = useState(0);
 
-  const addNote = (newNote: Note) => {
-    setNotes([...notes, newNote]);
+  const addNote = (newNote: string) => {
+    setNotes([
+      ...notes,
+      {
+        id: countNote.toString(),
+        ticket_id: "",
+        user_id: "",
+        note: newNote,
+        created_at: Date.now().toString(),
+      },
+    ]);
+    setCountNote(countNote + 1);
+  };
+
+  const removeNote = (id: string) => {
+    console.log("Removing note with value: ", id, notes);
+    setNotes(notes.filter((note) => note?.id !== id));
+  };
+
+  const updateNote = (id: string, value: string) => {
+    console.log("Updating note with id: ", id, " to value: ", value);
+    setNotes(
+      notes.map((note) => {
+        if (note.id === id) {
+          return { ...note, note: value };
+        }
+        return note;
+      })
+    );
   };
 
   return (
@@ -133,10 +161,15 @@ export default function CreateTicketPage({
                   <CardTitle>Ticket Notes</CardTitle>
                 </CardHeader>
                 {notes.map((note, index) => (
-                  <NoteCard key={index} note={note} />
+                  <NoteCard
+                    key={index}
+                    note={note}
+                    removeNote={removeNote}
+                    updateNote={updateNote}
+                  />
                 ))}
                 <CardFooter className="justify-center border-t p-4">
-                  <AddNoteButton onClick={addNote} />
+                  <AddNoteButton onClick={() => addNote("")} />
                 </CardFooter>
               </Card>
             </div>

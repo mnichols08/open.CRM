@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   File,
@@ -38,12 +39,28 @@ import {
 
 import { Customer } from "@/lib/definitions";
 import { db } from "@vercel/postgres";
+import { deleteCustomer, fetchCustomers } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
-export default async function AllCustomers() {
-  const client = await db.connect();
-  const data = await client.sql<Customer>`SELECT * FROM customers`;
-  const customers: Customer[] = data.rows;
-  client.release();
+export default function AllCustomers() {
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  useEffect(() => {
+    fetchCustomers().then((data) => {
+      const customers: Customer[] = data;
+      setCustomers(customers);
+    });
+  }, []);
+
+  const handleDelete = (id: any) => {
+    // API call to delete an item
+    console.log("Deleting customer with id: ", id);
+    deleteCustomer(id);
+    fetchCustomers().then((data) => {
+      const customers: Customer[] = data;
+      setCustomers(customers);
+    });
+  };
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -84,9 +101,11 @@ export default async function AllCustomers() {
             </Button>
             <Button size="sm" className="h-8 gap-1">
               <PlusCircle className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Add Customer
-              </span>
+              <Link href="/customers/create">
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Add Customer
+                </span>
+              </Link>
             </Button>
           </div>
         </div>
@@ -142,9 +161,15 @@ export default async function AllCustomers() {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem>
-                            <Link href={`/customers/edit/${customer.id}`}>Edit</Link>
+                            <Link href={`/customers/edit/${customer.id}`}>
+                              Edit
+                            </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(customer.id)}
+                          >
+                            Delete
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
