@@ -1,13 +1,23 @@
-import Image from "next/image"
-import Link from "next/link"
-
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { useFormState } from "react-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { authenticate } from "@/lib/actions";
+import { signIn } from "next-auth/react";
 
 export default function Homepage() {
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const handleGoogleSignIn = () => {
+    signIn("google");
+  };
   return (
-    <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+    <form
+      action={dispatch}
+      className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]"
+    >
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
@@ -20,6 +30,7 @@ export default function Homepage() {
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
+                name="email"
                 id="email"
                 type="email"
                 placeholder="m@example.com"
@@ -36,12 +47,12 @@ export default function Homepage() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input name="password" id="password" type="password" required />
             </div>
             <Button type="submit" className="w-full">
               Login
             </Button>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
               Login with Google
             </Button>
           </div>
@@ -62,6 +73,6 @@ export default function Homepage() {
           className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>
-    </div>
-  )
+    </form>
+  );
 }

@@ -10,6 +10,7 @@ async function seedCustomers() {
   await client.sql`
         CREATE TABLE IF NOT EXISTS customers (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        seq_no CARCHAR(25),
         name VARCHAR(255),
         address1 VARCHAR(255),
         address2 VARCHAR(255),
@@ -26,8 +27,8 @@ async function seedCustomers() {
     customers.map(
       (customer, i) =>
         client.sql`
-            INSERT INTO customers (name )
-            VALUES (${customer.customer})
+            INSERT INTO customers (seq_no, name, phone )
+            VALUES (${customer.seq_no}, ${customer.name}, ${customer.phone})
             ON CONFLICT (id) DO NOTHING;
         `
     )
@@ -68,12 +69,12 @@ async function seedOrders() {
 
   return await client.sql`
   CREATE TABLE IF NOT EXISTS orders (
-     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     source TEXT NOT NULL,
-        parts VARCHAR(255),
-        eta VARCHAR(255),
-        freight VARCHAR(1000),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    parts VARCHAR(255),
+    eta VARCHAR(255),
+    freight VARCHAR(1000),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         
   )
   `;
@@ -82,7 +83,7 @@ async function seedOrders() {
 async function seedTickets() {
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
-  //await client.sql`CREATE TYPE statustype AS ENUM('${open}', ${helpWanted}, ${closed})`;
+  await client.sql`CREATE TYPE statustype AS ENUM('open', 'helpWanted', 'closed')`;
 
   await client.sql`
             CREATE TABLE IF NOT EXISTS tickets (
@@ -107,7 +108,7 @@ async function seedNotes() {
   await client.sql`
         CREATE TABLE IF NOT EXISTS notes (
             id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-            ticket_id UUID NOT NULL REFERENCES tickets(id),
+            ticket_id UUID NOT NULL REFERENCES tickets(id) on DELETE CASCADE,
             user_id UUID NOT NULL REFERENCES users(id),
             note TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -126,7 +127,6 @@ async function seedProducts() {
             linecode varchar(255) NOT NULL,
             partnumber varchar(255) NOT NULL,
             name varchar(255) NOT NULL,
-            order_id UUID NOT NULL,
             cost DECIMAL NOT NULL,
             quoted_price DECIMAL NOT NULL,
             extra_cost DECIMAL NOT NULL,
@@ -139,12 +139,12 @@ async function seedProducts() {
 export async function GET() {
   try {
     await client.sql`BEGIN`;
-    await seedUsers();
-    await seedCustomers();
-    await seedTickets();
+    // await seedUsers();
+    // await seedCustomers();
+    // await seedTickets();
     await seedNotes();
-    await seedProducts();
-    await seedOrders();
+    // await seedProducts();
+    // await seedOrders();
     await client.sql`COMMIT`;
 
     return Response.json({ message: "Database seeded successfully" });
