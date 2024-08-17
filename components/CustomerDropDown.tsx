@@ -40,7 +40,7 @@ export default function CustomerDropDown({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[300px] justify-between"
+          className="w-full justify-between"
         >
           {value
             ? customers.find((customers) => customers.name === value)?.name
@@ -48,7 +48,7 @@ export default function CustomerDropDown({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput placeholder="Search customer..." />
           <CommandList>
@@ -57,7 +57,7 @@ export default function CustomerDropDown({
               {customers.map((customer) => (
                 <CommandItem
                   key={customer.name}
-                  value={customer.name}
+                  value={customer.name || ""}
                   onSelect={(currentValue: any) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
