@@ -22,8 +22,10 @@ import { Customer } from "@/lib/definitions";
 
 export default function CustomerDropDown({
   selectedCustomer,
+  updateCustomer,
 }: {
   selectedCustomer: string | undefined;
+  updateCustomer: any;
 }) {
   const [customers, setCustomers] = useState<Customer[]>([]);
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function CustomerDropDown({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(selectedCustomer);
 
+  useEffect(() => updateCustomer(value), [value]);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -43,7 +46,7 @@ export default function CustomerDropDown({
           className="w-full justify-between"
         >
           {value
-            ? customers.find((customers) => customers.name === value)?.name
+            ? customers.find((customer) => customer.id === value)?.name
             : "Select customer..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -54,24 +57,26 @@ export default function CustomerDropDown({
           <CommandList>
             <CommandEmpty>No customer found.</CommandEmpty>
             <CommandGroup>
-              {customers.map((customer) => (
-                <CommandItem
-                  key={customer.name}
-                  value={customer.name || ""}
-                  onSelect={(currentValue: any) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === customer.name ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {customer.name}
-                </CommandItem>
-              ))}
+              {customers.map((customer) => {
+                return (
+                  <CommandItem
+                    key={customer.id}
+                    value={customer.name || ""}
+                    onSelect={(currentValue: any) => {
+                      setValue(currentValue === value ? "" : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === customer.name ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {customer.name}
+                  </CommandItem>
+                );
+              })}
             </CommandGroup>
           </CommandList>
         </Command>

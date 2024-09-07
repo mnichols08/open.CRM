@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import TopRow from "@/components/TopRow";
 import { Separator } from "@/components/ui/separator";
@@ -40,35 +41,50 @@ import AllOrders from "@/components/Orders/AllOrders";
 import AllProducts from "@/components/Products/AllProducts";
 import AllUsers from "@/components/Users/AllUsers";
 import { checkIfAdmin } from "@/lib/actions";
+import { useState, useEffect } from "react";
+import { Ticket } from "@/lib/definitions";
 
-export default async function TicketsDashboard() {
-  // Example values for the tickets dashboard (top row variables)
-  const wTickets = Math.floor(Math.random() * 100);
-  const wTicketsLast = Math.floor(Math.random() * 100);
-  const mTickets = wTicketsLast * 4;
-  const mTicketsLast = Math.floor(Math.random() * 1000);
+export default function TicketsDashboard() {
   const exampleTicket = {
+    id: "1",
     customer: "RAPID REPAIR",
-    customerID: "2afa1b1a-4525-45c1-af03-cd191a3efd04",
+    customer_id: "2afa1b1a-4525-45c1-af03-cd191a3efd04",
     reason: "water pump",
     year: 2022,
     make: "Toyota",
     model: "Corolla",
     engine: "1.8L",
     submodel: "LE",
-    notes: ["needs brake pads, rotors, calipers", "found leak", "ordered part"],
     status: "action",
-    date: "2023-09-10",
+    created_by: "admin",
+    created_at: Date.now(),
   };
+  const [selectedTicket, setSelectedTicket] = useState<Ticket>(exampleTicket);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const wTickets = Math.floor(Math.random() * 100);
+  const wTicketsLast = Math.floor(Math.random() * 100);
+  const mTickets = wTicketsLast * 4;
+  const mTicketsLast = Math.floor(Math.random() * 1000);
+
   const improvement = (nTickets: number, nTicketsLast: number) =>
     Math.round(((nTickets - nTicketsLast) / nTicketsLast) * 100);
-  const isAdmin = await checkIfAdmin();
+
+  useEffect(() => {
+    checkIfAdmin().then((isAdmin) => {
+      setIsAdmin(isAdmin);
+    });
+  }, []);
+
   const weekImprovement = improvement(wTickets, wTicketsLast);
   const monthImprovement = improvement(mTickets, wTicketsLast);
   const progress = (improvement: number) =>
     improvement > 0 ? improvement : 0.1;
   const nTickets = Math.floor(Math.random() * 100);
   const mProgress = progress(monthImprovement);
+  const setViewTicket = (ticket: Ticket) => {
+    setSelectedTicket(ticket);
+  };
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -111,7 +127,7 @@ export default async function TicketsDashboard() {
             </TabsContent>
           )}
           <TabsContent value="tickets">
-            <AllTickets />
+            <AllTickets setViewTicket={setViewTicket} />
           </TabsContent>
           <TabsContent value="customers">
             <AllCustomers />
@@ -125,11 +141,14 @@ export default async function TicketsDashboard() {
         </Tabs>
       </div>
       <div>
-        <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
+        <Card
+          className="overflow-hidden border-red-500"
+          x-chunk="dashboard-05-chunk-4"
+        >
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="grid gap-0.5">
               <CardTitle className="group flex items-center gap-2 text-lg">
-                Ticket {exampleTicket.customerID.slice(-7)}
+                Ticket {selectedTicket.customer_id?.slice(-7)}
                 <Button
                   size="icon"
                   variant="outline"
@@ -172,48 +191,50 @@ export default async function TicketsDashboard() {
               <dl className="grid gap-3">
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Ticket ID</dt>
-                  <dd>{exampleTicket.customerID.slice(-7)}</dd>
+                  <dd>{selectedTicket.customer_id?.slice(-7)}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Status</dt>
                   <dd>
-                    <span className="text-primary">{exampleTicket.status}</span>
+                    <span className="text-primary">
+                      {selectedTicket.status}
+                    </span>
                   </dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Reason</dt>
-                  <dd>{exampleTicket.reason}</dd>
+                  <dd>{selectedTicket.reason}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Year</dt>
-                  <dd>{exampleTicket.year}</dd>
+                  <dd>{selectedTicket.year}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Make</dt>
-                  <dd>{exampleTicket.make}</dd>
+                  <dd>{selectedTicket.make}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Model</dt>
-                  <dd>{exampleTicket.model}</dd>
+                  <dd>{selectedTicket.model}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Engine</dt>
-                  <dd>{exampleTicket.engine}</dd>
+                  <dd>{selectedTicket.engine}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-muted-foreground">Submodel</dt>
-                  <dd>{exampleTicket.submodel}</dd>
+                  <dd>{selectedTicket.submodel}</dd>
                 </div>
               </dl>
               <Separator className="my-2" />
               <div className="font-semibold">Notes</div>
               <dl className="grid gap-3">
-                {exampleTicket.notes.map((note, i) => (
+                {/* {selectedTicket.notes.map((note, i) => (
                   <div className="flex items-center justify-between" key={i}>
                     <dt className="text-muted-foreground">Note {i + 1}</dt>
                     <dd>{note}</dd>
                   </div>
-                ))}
+                ))} */}
               </dl>
             </div>
           </CardContent>

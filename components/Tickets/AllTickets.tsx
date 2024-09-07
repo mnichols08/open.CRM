@@ -37,16 +37,13 @@ import {
 } from "@/components/ui/table";
 
 import { Ticket } from "@/lib/definitions";
-import { db } from "@vercel/postgres";
 import Link from "next/link";
 import { deleteTicket, fetchTickets } from "@/lib/actions";
 import { useState, useEffect } from "react";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-// import { handleClick } from "@/lib/actions";
 
-export default function AllTickets() {
+export default function AllTickets(props: any) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  const setViewTicket = props.setViewTicket;
 
   useEffect(() => {
     fetchTickets().then((data) => {
@@ -135,7 +132,13 @@ export default function AllTickets() {
 
               <TableBody>
                 {tickets.map((ticket) => (
-                  <TableRow key={ticket.id}>
+                  <TableRow
+                    key={ticket.id}
+                    onClick={() => {
+                      console.log(ticket);
+                      setViewTicket(ticket);
+                    }}
+                  >
                     <TableCell>{ticket.id}</TableCell>
                     <TableCell>{ticket.reason}</TableCell>
                     <TableCell>{ticket.status}</TableCell>

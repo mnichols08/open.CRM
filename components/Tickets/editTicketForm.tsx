@@ -28,6 +28,7 @@ import { AddNoteButton } from "./AddNoteButton";
 export default function EditTicketPage(props: any) {
   const children = props.children;
   const ticketID = props.ticketID;
+  const customerID = props.currentCustomer;
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [customer, setCustomer] = useState([]);
 
@@ -87,6 +88,7 @@ export default function EditTicketPage(props: any) {
       className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8"
     >
       <input type="hidden" name="ticketID" value={ticketID} />
+      <input type="hidden" name="customer_id" value={customerID} />
       <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
         <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">

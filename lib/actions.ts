@@ -295,6 +295,15 @@ const createTicket = async (ticket: {
   return ticketID;
 };
 
+export async function fetchCustomerFromTicket(ticketID: string) {
+  const client = await db.connect();
+  const data =
+    await client.sql`SELECT customer_id from TICKETS where id = ${ticketID}`;
+  const customer = data.rows[0].customer_id;
+  client.release();
+  return customer;
+}
+
 export async function fetchTickets() {
   const client = await db.connect();
   const data = await client.sql<Ticket>`SELECT * FROM tickets`;
@@ -317,7 +326,7 @@ export const updateTicket = async (
     const session: Session | null | undefined = await auth();
     const user: User = session?.user as User;
     const ticket = {
-      customer_id: formData.get("customer") as string,
+      customer_id: formData.get("customer_id") as string,
       reason: formData.get("reason") as string,
       status: formData.get("status") as string,
       year: formData.get("year") as string,
@@ -327,6 +336,7 @@ export const updateTicket = async (
       submodel: formData.get("submodel") as string,
       ticketID: formData.get("ticketID") as string,
     };
+    console.log(ticket);
     const notes = formData.getAll("notes") as string[];
     const noteIDs = formData.getAll("note_id") as string[];
 
